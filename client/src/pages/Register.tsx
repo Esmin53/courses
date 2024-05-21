@@ -3,14 +3,16 @@ import {AuthValidatorType, AuthValidator} from "../../../shared/validators/auth"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from "axios"
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [confirmPasswordError, setConfirmPasswordError] = useState(false)
 
     const navigate = useNavigate()
+    const { currentUser } = useAuthStore()
 
     const {
         register,
@@ -53,6 +55,12 @@ const Register = () => {
             setConfirmPasswordError(false)
         }
     }, [confirmPassword])
+
+    useEffect(() => {
+        if(currentUser !== null) {
+            navigate("/")
+        }
+    }, [])
 
     return (
         <div className="w-full min-h-screen h-full  relative flex gap-8">

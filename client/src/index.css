@@ -5,3 +5,8 @@
 * {
     font-family: "Poppins";
 }
+
+html,
+body {
+    min-height: 100vh;
+}
