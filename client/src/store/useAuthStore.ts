@@ -5,11 +5,13 @@ type authUserState = {
     currentUser: {
         user: {
             username: string,
-            id: string
+            id: string,
+            role: string
         },
         token: string
     } | null,
-    signIn: (user: {id: string, username: string, token: string}) => void,
+    signIn: (user: {id: string, username: string, token: string, role: string}) => void,
+    updateUser: (user: {id: string, username: string, role: string}) => void,
     signOut: () => void
 }
 
@@ -22,11 +24,23 @@ export const useAuthStore = create<authUserState>()(
                     return { currentUser: {
                         user: {
                             username: user.username,
-                            id: user.id
+                            id: user.id,
+                            role: user.role
                         },
                         token: user.token
                     }}
                 }),
+            updateUser: (data) => 
+                set((state) => ({
+                   currentUser: {
+                    user: {
+                        username: data.username,
+                        id: data.id,
+                        role: data.role
+                    },
+                    token: state?.currentUser?.token as string
+                   }
+                  })),
                 signOut: () => set({ currentUser: null})
         }),
         {

@@ -3,6 +3,7 @@ import { AuthValidator } from '../../shared/validators/auth';
 import { db } from '../db/db';
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { error } from 'console';
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -71,13 +72,53 @@ export const login = async (req: Request, res: Response) => {
                 return res.status(200).json({ 
                     token: token,
                     id: user.id,
-                    username: user.username
-                }); // Return the token to the client
+                    username: user.username,
+                    role: user.role
+                });
               }
 
         )
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
+    }
+}
+
+export const becomeTutor = async (req: Request, res: Response) => {
+    try {
+
+        const user = await db.user.findFirst({
+            where: {
+                id: res.locals.user.id,
+            }
+        })
+
+        if(user?.role !== 'STUDENT') {
+            return res.status(400).json({success: false, error: "Bad Request", message: "User is admin or already a tutor!"})
+        }
+
+        if(!req.body.description || !req.body.specialization) {
+            return res.status(400).json({success: false, error: "Bad Request", message: "Required information is missing or incomplete."})
+        }
+
+        const updatedUser = await db.user.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                role: 'TUTOR',
+                description: req.body.description,
+                specialization: req.body.specialization
+            }
+        })
+
+        console.log(updatedUser)
+        return res.status(200).json({success: true, userInfo: {
+            id: updatedUser.id,
+            username: updatedUser.username,
+            role: updatedUser.role
+        }})
+    } catch (error) {
+        return res.status(500).json({success: false})
     }
 }

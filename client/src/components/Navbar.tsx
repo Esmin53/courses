@@ -19,12 +19,12 @@ const Navbar = () => {
     return (
         <div className="flex w-full items-center justify-center">
             <div className="w-full flex items-center justify-between max-w-8xl py-2 sm:py-4"> 
-                <h1 className="text-xl sm:text-2xl font-semibold text-primary-purple">WebCourses</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold text-primary-purple cursor-pointer" onClick={() => navigate('/')}>WebCourses</h1>
                 <ul className="sm:flex items-center justify-center gap-4 hidden">
                     <li className="cursor-pointer font-medium" onClick={() => navigate('/')}>Home</li>
                     <li className="cursor-pointer font-medium">About us</li>
                     <li className="cursor-pointer font-medium">Courses</li>
-                    <li className="cursor-pointer font-medium">Join Us</li>
+                    <li className="cursor-pointer font-medium" onClick={() => navigate('/become-a-tutor')}>Join Us</li>
                     <div className="w-0 h-7 bg-red border-[0.5px] border-zinc-200 shadow-sm" />
                     {
                         currentUser ? (

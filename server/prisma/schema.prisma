@@ -15,9 +15,20 @@ datasource db {
   // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
+enum Role {
+  STUDENT
+  TUTOR
+  ADMIN
+}
+
 model User {
   id       String    @id @default(cuid())
   username String?   @unique
+  role      Role     @default(STUDENT)
+  description String?
+  profile_picture String?
+  specialization  String?
+
   password  String
   createdAt DateTime  @default(now())
 }

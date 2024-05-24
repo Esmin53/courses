@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router-dom"
 import Navbar from "../components/Navbar"
 
 
 const Homepage = () => {
 
-
+    const navigate = useNavigate()
 
     return (
         <div className="w-full h-full min-h-screen flex flex-col items-center px-2">
@@ -13,11 +14,11 @@ const Homepage = () => {
                         <h1 className="text-center sm:text-start text-4xl sm:text-5xl text-primary-purple font-bold">Dev Courses</h1>
                         <p className=" text-primary-purple sm:font-medium text-center sm:text-start">Best online learning website for developers and programmers. <br />
                             From hobby to paycheck, join us and start you computer science journey, expand your programming knowlege or become
-                            a seller and share your knowlege with the world.
+                            a tutor and share your knowlege with the world.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4">
                             <button className=" p-2 px-4 border-2 rounded-lg border-primary-purple text-primary-purple hover:bg-primary-purple 
-                            hover:text-white font-semibold duration-200">Become a tutor</button>
+                            hover:text-white font-semibold duration-200" onClick={() => navigate('/become-a-tutor')}>Become a tutor</button>
                             <button className="h-10 bg-secondary-purple border-2 border-secondary-purple rounded-lg text-white 
                             font-semibold px-4 hover:opacity-85 shadow">Start learning</button>
                         </div>
