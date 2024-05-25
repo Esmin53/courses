@@ -1,4 +1,4 @@
-import { LogOut, User } from "lucide-react"
+import { LogOut, Plus, User } from "lucide-react"
 import { useAuthStore } from "../store/useAuthStore"
 import {
     DropdownMenu,
@@ -32,13 +32,22 @@ const Navbar = () => {
                                 <DropdownMenuTrigger className=" border-secondary-purple rounded-full border-2 flex outline-none">
                                     <User  className="m-1 w-5 h-5 text-secondary-purple cursor-pointer"/>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="min-w-48">
+                                <DropdownMenuContent className="min-w-48 bg-white">
                                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
+                                    <DropdownMenuItem className="cursor-pointer w-full flex items-center hover:bg-zinc-100" onClick={() => navigate('/profile')}>
+                                        <User className="mr-2 h-4 w-4" />
+                                        <span>My Profile</span>
+                                    </DropdownMenuItem>
+                                    {currentUser?.user.role === 'TUTOR' ? 
+                                    <DropdownMenuItem className="cursor-pointer w-full flex items-center hover:bg-zinc-100" onClick={() => navigate('/new-course')}>
+                                        <Plus className="mr-2 h-4 w-4" />
+                                        <span>New course</span>
+                                    </DropdownMenuItem> : null}
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem className="cursor-pointer w-full flex items-center hover:bg-zinc-100" onClick={() => signOut()}>
-                                    <LogOut className="mr-2 h-4 w-4" />
-                                    <span>Log out</span>
+                                        <LogOut className="mr-2 h-4 w-4" />
+                                        <span>Log out</span>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                                 </DropdownMenu>
