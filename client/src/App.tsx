@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Homepage from "./pages/Homepage";
 import JoinUs from "./pages/JoinUs";
 import Profile from "./pages/Profile";
+import NewCourse from "./pages/NewCourse";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
       </Routes>
       <Routes>
         <Route path="profile" element={<Profile />}/>
+      </Routes>
+      <Routes>
+        <Route path="new-course" element={<NewCourse />}/>
       </Routes>
     </BrowserRouter>
   )
