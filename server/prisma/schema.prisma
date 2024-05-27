@@ -28,7 +28,40 @@ model User {
   description String?
   profile_picture String?
   specialization  String?
-
   password  String
   createdAt DateTime  @default(now())
+
+  courses   Course[]
+  enrollments   Enrollment[]
 }
+
+model Course {
+    id            String    @id @default(cuid())
+    title         String  
+    description   String
+    tags          String[]
+    media         String
+    price         Decimal
+
+    authorId      String
+    author        User  @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+    ratings       Rating[]
+    enrollments   Enrollment[]
+}
+
+model Enrollment {
+  id              String    @id @default(cuid())
+  courseId        String
+  course          Course @relation(fields: [courseId], references: [id])
+  studentId       String
+  student         User  @relation(fields: [studentId], references: [id])
+}
+
+model Rating {
+      id           String    @id @default(cuid())
+
+      courseId      String
+      course        Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+

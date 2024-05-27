@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import { LoaderCircle, LoaderPinwheel, LucideLoader2, Plus, UploadCloud, X } from "lucide-react";
+import { LucideLoader2, Plus, UploadCloud, X } from "lucide-react";
 import { LANGUAGES } from "../../../shared/constants/languages"
 import { PROGRAMMING_AREAS } from "../../../shared/constants/areas"
 import {
@@ -19,6 +19,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CourseValidator, CourseValidatorType} from "../../../shared/validators/course"
 import axios from "axios";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useNavigate } from "react-router-dom";
+import { Toaster, toast } from "sonner";
 
 export const NewCourse = () => {
 
@@ -27,8 +30,11 @@ export const NewCourse = () => {
     const [media, setMedia] = useState<File | null>()
     const [mediaPreview, setMediaPreview] = useState<string | null>(null)
     const [isUploading, setIsUploading] = useState(false)
+    const { currentUser } = useAuthStore()
 
     const fileInputRef = useRef<HTMLInputElement>(null)
+
+    const navigate = useNavigate()
 
     const {
         register,
@@ -44,14 +50,27 @@ export const NewCourse = () => {
         if(!media) {
             return
         }
+        const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime', 'video/x-ms-wmv', 'video/x-flv', 'video/avi'];
+        if (!validVideoTypes.includes(media.type)) {
+            console.error("Invalid file type. Only video files are accepted.");
+            toast.error("Please provide valid video lesson!")
+            return;
+        }
 
-        const videoRef = ref(storage, `videos/${media.name + uuidv4()}`)
+        try {
+            const videoRef = ref(storage, `videos/${media.name + uuidv4()}`)
 
-        await uploadBytes(videoRef, media)
+            await uploadBytes(videoRef, media)
+    
+            const downloadRef = await getDownloadURL(videoRef)
+    
+            return downloadRef
+        } catch (error) {
+            console.error("Error uploading video:", error);
+            toast.error("There was an error uploading your video")
+            return;
+        }
 
-        const downloadRef = await getDownloadURL(videoRef)
-
-        return downloadRef
     }
 
     const onSubmit: SubmitHandler<CourseValidatorType> = async ({title, description, price, media, tags}) => {
@@ -59,20 +78,35 @@ export const NewCourse = () => {
         try {
             media = await uploadVideo()
 
-      
-                
+            if(media) {
                 const response = await axios.post(`http://localhost:3124/api/v1/course/upload-course`, {
                     title,
                     description,
                     price,
                     tags,
                     media
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${currentUser?.token}`
+                    }
                 })
+
+                if(response.status === 200 && response.data.success === true) {
+                    setIsUploading(false)
+                    toast.success("Your course has been created successfully. You will be redirected shortly.")
+                    navigate(`/course/${response.data.courseId}`)
+                }
 
                 console.log(response)
                 setIsUploading(false)
+            } else {
+                toast.error("There was an error creating your course. Please try again.")
+                setIsUploading(false)
+            }
+
         } catch (error) {
             console.log(error)
+            toast.error("There was an error creating your course. Please try again.")
             setIsUploading(false)
         }
     }
@@ -85,8 +119,6 @@ export const NewCourse = () => {
         } else {
             setTags([...tags, test])
         }
-
-
     }
 
     useEffect(() => {
@@ -130,15 +162,12 @@ export const NewCourse = () => {
                                 <source src={mediaPreview} />
                             </video>}
                         </div>
-                        <input type="file" multiple={false} ref={fileInputRef} className="hidden" onChange={(e) => 
-                            e.target.files?.length && setMedia(e.target.files[0])
 
-                            }/>
                         <h2 className="text-lg sm:text-xl font-medium py-2 border-b border-secondary-purple">Programming languages and relevant areas:</h2>
                         <div className="w-full flex flex-wrap gap-2 py-2">
                         {tags?.map((item) => (
                                         <div key={item.value} className="py-1 px-2 rounded-sm bg-primary-purple text-sm sm:text-md text-white cursor-pointer"
-                                        >{item.label}</div>
+                                        onClick={() => handleTags(item)}>{item.label}</div>
                                     ))}
                         </div>
                         </div>
@@ -148,6 +177,8 @@ export const NewCourse = () => {
                         <form className="w-full flex flex-col gap-4 py-4" 
                         onSubmit={handleSubmit(onSubmit)}>
                             <div className="w-full flex flex-col">
+                                <input type="file" multiple={false} ref={fileInputRef} className="hidden" onChange={(e) => 
+                                e.target.files?.length && setMedia(e.target.files[0])}/>
                                 <label htmlFor="title" className="text-sm font-medium">Title</label>
                                 <input type="text" placeholder="Title" className="w-full py-1 border-2 border-gray-900 rounded-md px-1"
                                 {...register('title')}/>
@@ -204,6 +235,7 @@ export const NewCourse = () => {
                     </div>
                 </div>
             </div>
+            <Toaster />
         </div>
     )
 }
