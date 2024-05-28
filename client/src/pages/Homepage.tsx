@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import Navbar from "../components/Navbar"
+import HomepageFeed from "@/components/HomepageFeed"
+import { LANGUAGES } from "../../../shared/constants/languages"
+import { PROGRAMMING_AREAS } from "../../../shared/constants/areas"
 
 
 const Homepage = () => {
@@ -9,7 +12,8 @@ const Homepage = () => {
     return (
         <div className="w-full h-full min-h-screen flex flex-col items-center px-2">
             <Navbar />
-            <div className="w-full max-w-8xl h-fit flex flex-col-reverse md:flex-row relative justify-center items-center">
+            <div className="w-full max-w-8xl flex-1">
+            <div className="w-full  h-fit flex flex-col-reverse md:flex-row relative justify-center items-center">
                     <div className="w-full h-full  flex flex-col gap-4 sm:gap-6">
                         <h1 className="text-center sm:text-start text-4xl sm:text-5xl text-primary-purple font-bold">Dev Courses</h1>
                         <p className=" text-primary-purple sm:font-medium text-center sm:text-start">Best online learning website for developers and programmers. <br />
@@ -26,6 +30,20 @@ const Homepage = () => {
 
                 <img src="https://img.freepik.com/free-vector/online-certification-illustration_23-2148575636.jpg?t=st=1716328129~exp=1716331729~hmac=553e4746225d2a03d267262368d21e2bb756c73afc049ebc15c247a01796e489&w=740"
                 className="w-full sm:h-[30rem] lg:h-[37.5rem] object-cover" />
+            </div>
+            <HomepageFeed />
+            <div className="w-full mt-10">
+                <h1 className="text-3xl font-bold text-gray-800">A broad selection of categories</h1>
+                <p className="text-xl my-4">Choose from 81 computer science areas and programming languages</p>
+                <div className="w-full flex gap-6 flex-wrap items-center justify-between">
+                    {LANGUAGES.map((item) => {
+                        return <a key={item.value} href={`/course?tags=${item.value}`} className="text-primary-purple text-lg font-medium">{item.label}</a>
+                    })}
+                    {PROGRAMMING_AREAS.map((item) => {
+                        return <a key={item.value} href={`/course?tags=${item.value}`} className="text-primary-purple text-lg font-medium">{item.label}</a>
+                    })}
+                </div>
+            </div>
             </div>
         </div>
     )

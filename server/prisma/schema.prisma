@@ -31,8 +31,9 @@ model User {
   password  String
   createdAt DateTime  @default(now())
 
-  courses   Course[]
+  courses       Course[]
   enrollments   Enrollment[]
+  ratings       Rating[]
 }
 
 model Course {
@@ -59,9 +60,13 @@ model Enrollment {
 }
 
 model Rating {
-      id           String    @id @default(cuid())
-
-      courseId      String
-      course        Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  rating    Int      @default(1)
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
