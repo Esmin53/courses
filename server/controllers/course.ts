@@ -108,3 +108,34 @@ export const getCourses = async (req: Request, res: Response) => {
         return res.status(500).json({success: false})
     }
 }
+
+export const getCourse = async (req: Request, res: Response) => {
+    try {
+        const { courseId } = req.params
+        
+        const course = await db.course.findFirst({
+            where: {
+                id: courseId
+            },
+            select: {
+                id: true,
+                price: true,
+                description: true,
+                title: true,
+                author: {
+                    select: {
+                        id: true,
+                        username: true,
+                        specialization: true,
+                        description: true
+                    }
+                }
+            }
+
+        })
+
+        return res.status(200).json({ success: true, course})
+    } catch (error) {
+        return res.status(500).json({ success: false})
+    }
+}
