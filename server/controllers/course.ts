@@ -17,10 +17,13 @@ export const uploadCourse = async (req: Request, res: Response) => {
             return res.status(401).json({success: false, error: "Unauthorized", message: "No user or user is not a tutor!"})
         }
 
-        const { title, description, tags, media, price } = CourseValidator.parse(body);
+        const { title, description, tags, media, price, thumbnail } = CourseValidator.parse(body);
 
         if(!media || typeof media !== 'string' || media.trim() === '') {
             return res.status(400).json({success: false, error: "Bad Request", message: "Course video not provided"})
+        }
+        if(!thumbnail || typeof thumbnail !== 'string' || thumbnail.trim() === '') {
+            return res.status(400).json({success: false, error: "Bad Request", message: "Course thumbnail not provided"})
         }
 
         console.log("body: ", body)
@@ -33,6 +36,7 @@ export const uploadCourse = async (req: Request, res: Response) => {
                 price,
                 tags,
                 media,
+                thumbnail,
                 authorId: user.id
             }
         })
@@ -71,6 +75,7 @@ export const getCourses = async (req: Request, res: Response) => {
                 id: true,
                 title: true,
                 price: true,
+                thumbnail: true,
                 author: {
                     select: {
                         id: true,
@@ -91,7 +96,6 @@ export const getCourses = async (req: Request, res: Response) => {
                 }
             });
         
-            // Handle the case when there are no ratings for a course
             const averageRating = avgRating._avg.rating || 0;
         
             return {
@@ -99,8 +103,6 @@ export const getCourses = async (req: Request, res: Response) => {
                 averageRating: averageRating
             };
         }));
-        
-        console.log(coursesWithAverageRating)
 
         return res.status(200).json({success: true, courses: coursesWithAverageRating})
     } catch (error) {
@@ -122,6 +124,7 @@ export const getCourse = async (req: Request, res: Response) => {
                 price: true,
                 description: true,
                 title: true,
+                thumbnail: true,
                 author: {
                     select: {
                         id: true,

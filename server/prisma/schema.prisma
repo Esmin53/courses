@@ -43,6 +43,7 @@ model Course {
     tags          String[]
     media         String
     price         Decimal
+    thumbnail     String
 
     authorId      String
     author        User  @relation(fields: [authorId], references: [id], onDelete: Restrict)

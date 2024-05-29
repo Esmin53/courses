@@ -9,6 +9,7 @@ const HomepageFeed = () => {
         title: string
         id: string
         price: string
+        thumbnail: string
         author: {
             id: string,
             username: string,

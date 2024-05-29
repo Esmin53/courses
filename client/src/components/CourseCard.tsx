@@ -6,6 +6,7 @@ interface CourseCardProps {
     title: string
     id: string
     price: string
+    thumbnail: string
     author: {
         id: string,
         username: string,
@@ -14,7 +15,7 @@ interface CourseCardProps {
     averageRating: number
 }
 
-const CourseCard = ({title, author, price, id, averageRating}: CourseCardProps) => {
+const CourseCard = ({title, author, price, id, averageRating, thumbnail}: CourseCardProps) => {
 
     const navigate = useNavigate()
 
@@ -31,7 +32,9 @@ const CourseCard = ({title, author, price, id, averageRating}: CourseCardProps) 
 
     return (
         <div onClick={() => navigate(`/course/${id}`)} className="cursor-pointer">
-        <div className=" h-44 bg-sky-500"></div>
+        <div className=" h-44 bg-sky-500 relative">
+            <img src={thumbnail} alt="Course thumbnail" className="w-full h-full absolute top-0 left-0"/>
+        </div>
         <h2 className="font-semibold leading-5 line-clamp-2">{title}</h2>
         <p className="text-sm text-gray-600 font-medium">{author.username}, {author.specialization}</p>
         <div className="flex gap-2 items-center">

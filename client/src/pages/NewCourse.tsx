@@ -28,11 +28,14 @@ export const NewCourse = () => {
     const landsAndAreas = [...LANGUAGES, ...PROGRAMMING_AREAS]
     const [tags, setTags] = useState< {label: string, value: string}[]>([])
     const [media, setMedia] = useState<File | null>()
+    const [thumbnail, setThumbnail] = useState<File | null>()
     const [mediaPreview, setMediaPreview] = useState<string | null>(null)
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
     const [isUploading, setIsUploading] = useState(false)
     const { currentUser } = useAuthStore()
 
     const fileInputRef = useRef<HTMLInputElement>(null)
+    const thumbnailInputRef = useRef<HTMLInputElement>(null)
 
     const navigate = useNavigate()
 
@@ -73,18 +76,43 @@ export const NewCourse = () => {
 
     }
 
-    const onSubmit: SubmitHandler<CourseValidatorType> = async ({title, description, price, media, tags}) => {
+    const uploadThumbnail = async () => {
+
+        if(!thumbnail) {
+            return
+        }
+
+
+        try {
+            const photoRef = ref(storage, `thumbnails/${thumbnail.name + uuidv4()}`)
+
+            await uploadBytes(photoRef, thumbnail)
+    
+            const downloadRef = await getDownloadURL(photoRef)
+    
+            return downloadRef
+        } catch (error) {
+            console.error("Error uploading video:", error);
+            toast.error("There was an error uploading your video")
+            return;
+        }
+
+    }
+
+    const onSubmit: SubmitHandler<CourseValidatorType> = async ({title, description, price, media, tags, thumbnail}) => {
         setIsUploading(true)
         try {
             media = await uploadVideo()
+            thumbnail = await uploadThumbnail()
 
-            if(media) {
+            if(media && thumbnail) {
                 const response = await axios.post(`http://localhost:3124/api/v1/course/upload-course`, {
                     title,
                     description,
                     price,
                     tags,
-                    media
+                    media,
+                    thumbnail
                 }, {
                     headers: {
                         Authorization: `Bearer ${currentUser?.token}`
@@ -129,6 +157,15 @@ export const NewCourse = () => {
             setMediaPreview(null)
         }
     }, [media])
+    
+    useEffect(() => {
+        if(thumbnail) {
+            let url = URL.createObjectURL(thumbnail)
+            setThumbnailPreview(url)
+        } else {
+            setThumbnailPreview(null)
+        }
+    }, [thumbnail])
 
     useEffect(() => {
         setValue('tags', tags.map((item) => item.value))
@@ -163,6 +200,22 @@ export const NewCourse = () => {
                             </video>}
                         </div>
 
+                        <div className="w-full flex flex-col md:flex-row gap-2 md:gap-6 lg:gap-12">
+                            <div className="w-fit h-full ">
+                                <p className="text-lg font-medium text-gray-800">Upload your thumbnail</p>
+                                {thumbnail && <p className="text-lg text-red-600 cursor-pointer" onClick={() => setThumbnail(null)}>Remove</p>}
+                            </div>
+                            <div className="border border-primary-purple rounded-md border-dashed h-full aspect-video  md:flex-1 relative cursor-pointer"
+                            onClick={() => thumbnailInputRef.current && !thumbnail && thumbnailInputRef?.current.click()}>
+                                {thumbnailPreview && <img src={thumbnailPreview} className="w-full h-full aspect-video absolute 
+                                top-0 left-0 z-30"/>}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center">
+                                <UploadCloud className="w-6 md:w-10 h-6 md:h-10 text-secondary-purple z-20"/>
+                                <h2 className=" sm:text-lg md:text-xl text-secondary-purple text-center z-20">Upload an image</h2>
+                            </div>
+                            </div>
+                        </div>
+
                         <h2 className="text-lg sm:text-xl font-medium py-2 border-b border-secondary-purple">Programming languages and relevant areas:</h2>
                         <div className="w-full flex flex-wrap gap-2 py-2">
                         {tags?.map((item) => (
@@ -179,6 +232,8 @@ export const NewCourse = () => {
                             <div className="w-full flex flex-col">
                                 <input type="file" multiple={false} ref={fileInputRef} className="hidden" onChange={(e) => 
                                 e.target.files?.length && setMedia(e.target.files[0])}/>
+                                <input type="file" multiple={false} ref={thumbnailInputRef} className="hidden" onChange={(e) => 
+                                e.target.files?.length && setThumbnail(e.target.files[0])}/>
                                 <label htmlFor="title" className="text-sm font-medium">Title</label>
                                 <input type="text" placeholder="Title" className="w-full py-1 border-2 border-gray-900 rounded-md px-1"
                                 {...register('title')}/>

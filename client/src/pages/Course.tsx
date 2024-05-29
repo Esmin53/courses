@@ -11,6 +11,7 @@ export const Course = () => {
                 price: number,
                 description: string,
                 title: string,
+                thumbnail: string
                 author: {
                     id: string,
                     username: string,
@@ -44,8 +45,8 @@ export const Course = () => {
 
         <div className="flex-1 w-full max-w-8xl justify-self-center flex gap-6">
             <div className="w-2/3 flex flex-col gap-4">
-                <div className=" w-full aspect-video bg-red-300 max-h-[30rem]">
-
+                <div className=" w-full aspect-video bg-red-300 max-h-[30rem] relative">
+                    <img src={course?.thumbnail} alt="Course Thumbnail" className="absolute w-full h-full left-0 top-0"/>
                 </div>
                 <div className="flex justify-between items-center">
                     <div className="flex gap-1">
