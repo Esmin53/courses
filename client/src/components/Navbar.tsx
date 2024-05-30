@@ -9,6 +9,7 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "react-router-dom"
+import SearchBar from "./SearchBar"
 
 
 const Navbar = () => {
@@ -20,6 +21,7 @@ const Navbar = () => {
         <div className="flex w-full items-center justify-center">
             <div className="w-full flex items-center justify-between max-w-8xl py-2 sm:py-4"> 
                 <h1 className="text-xl sm:text-2xl font-semibold text-primary-purple cursor-pointer" onClick={() => navigate('/')}>WebCourses</h1>
+                <SearchBar />
                 <ul className="sm:flex items-center justify-center gap-4 hidden">
                     <li className="cursor-pointer font-medium" onClick={() => navigate('/')}>Home</li>
                     <li className="cursor-pointer font-medium">About us</li>

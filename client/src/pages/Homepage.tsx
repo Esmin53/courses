@@ -37,10 +37,10 @@ const Homepage = () => {
                 <p className="text-xl my-4">Choose from 81 computer science areas and programming languages</p>
                 <div className="w-full flex gap-6 flex-wrap items-center justify-between">
                     {LANGUAGES.map((item) => {
-                        return <a key={item.value} href={`/course?tags=${item.value}`} className="text-primary-purple text-lg font-medium">{item.label}</a>
+                        return <a key={item.value} href={`/courses?tags=${item.value}`} className="text-primary-purple text-lg font-medium">{item.label}</a>
                     })}
                     {PROGRAMMING_AREAS.map((item) => {
-                        return <a key={item.value} href={`/course?tags=${item.value}`} className="text-primary-purple text-lg font-medium">{item.label}</a>
+                        return <a key={item.value} href={`/courses?tags=${item.value}`} className="text-primary-purple text-lg font-medium">{item.label}</a>
                     })}
                 </div>
             </div>

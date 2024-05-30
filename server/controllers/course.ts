@@ -60,11 +60,34 @@ export const getCourses = async (req: Request, res: Response) => {
             
         }
 
-
         if(params.tags && typeof params.tags === 'string') {
             let tags: string[] = params?.tags?.split(',')
-            where.tags = { hasSome: tags}
+
+            if (tags.length > 0) {
+                if (!where.AND) {
+                    where.AND = [];
+                }
+                (where.AND as Prisma.CourseWhereInput[]).push({
+                    tags: {
+                        hasSome: tags
+                    }
+                });
         }
+    }
+
+    if (params.q && typeof params.q === 'string') {
+        if (!where.AND) {
+            where.AND = [];
+        }
+        (where.AND as Prisma.CourseWhereInput[]).push({
+            title: {
+                contains: params.q,
+                mode: 'insensitive' // optional: makes the search case-insensitive
+            }
+        });
+    }
+
+
         
 
         console.log(where)
