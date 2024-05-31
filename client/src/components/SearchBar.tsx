@@ -31,7 +31,6 @@ const SearchBar = () => {
         try {
             const response = await axios.get(`http://localhost:3124/api/v1/course/get-courses?tags=${tags}&q=${q}`)
 
-            console.log(response.data)
             setResults(response.data.courses)
         } catch (error) {
             console.log(error)
