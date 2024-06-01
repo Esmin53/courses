@@ -55,6 +55,9 @@ export const uploadCourse = async (req: Request, res: Response) => {
 export const getCourses = async (req: Request, res: Response) => {
     try {
         const params = req.query;
+        const page = Number(params.page) || 1
+        const pageSize = Number(params.pageSize) || 20
+        
 
         const where: Prisma.CourseWhereInput = {
             
@@ -82,15 +85,10 @@ export const getCourses = async (req: Request, res: Response) => {
         (where.AND as Prisma.CourseWhereInput[]).push({
             title: {
                 contains: params.q,
-                mode: 'insensitive' // optional: makes the search case-insensitive
+                mode: 'insensitive'
             }
         });
     }
-
-
-        
-
-        console.log(where)
 
         const courses = await db.course.findMany({
             where: where,
@@ -107,8 +105,17 @@ export const getCourses = async (req: Request, res: Response) => {
                         specialization: true
                     }
                 }
-            }
+            },
+            take: pageSize,
+            skip: (page - 1) * pageSize
+
         })
+
+        const coursesNum = await db.course.aggregate({
+            _count: true
+        })
+
+        const pages = Math.ceil(coursesNum._count / pageSize)
 
         const coursesWithAverageRating = await Promise.all(courses.map(async course => {
             const avgRating = await db.rating.aggregate({
@@ -128,7 +135,9 @@ export const getCourses = async (req: Request, res: Response) => {
             };
         }));
 
-        return res.status(200).json({success: true, courses: coursesWithAverageRating})
+
+
+        return res.status(200).json({success: true, courses: coursesWithAverageRating, pages})
     } catch (error) {
         console.log(error)
         return res.status(500).json({success: false})

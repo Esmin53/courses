@@ -2,12 +2,13 @@ import Navbar from "@/components/Navbar"
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import axios from "axios"
-import { Filter, Star, StarHalf } from "lucide-react"
+import { FilterX, Star, StarHalf } from "lucide-react"
+import Pagination from "@/components/Pagination"
 
 
 const Courses = () => {
-    const [tags, setTags] = useState<string[] >([])
     const [searchParams, setSearchParams] = useSearchParams()
+    const [pages, setPages] = useState<number >(1)
     const [results, setResults] = useState<{
         title: string
         id: string
@@ -24,14 +25,16 @@ const Courses = () => {
 
     const queryTags = searchParams.get('tags')
     const querySearch = searchParams.get('q')
+    const currentPage = searchParams.get("page") || 1
 
     const navigate = useNavigate()
 
     const getCourses = async () => {
         try {
-            const response = await axios.get(`http://localhost:3124/api/v1/course/get-courses?tags=${queryTags}&q=${querySearch}`)
+            const response = await axios.get(`http://localhost:3124/api/v1/course/get-courses?tags=${queryTags}&q=${querySearch}&page=${currentPage}`)
 
             setResults(response.data.courses)
+            setPages(response.data.pages)
         } catch (error) {
             
         }
@@ -50,9 +53,9 @@ const Courses = () => {
                     <div className="flex gap-2">
                         <div className="w-24 h-14 border border-gray-600 shadow-sm flex items-center justify-center cursor-pointer"
                         onClick={() =>{ 
-                        navigate('/courses?tags=&q=')
+                        navigate('/courses?tags=&q=&page=1')
                         }}>
-                            <Filter />
+                            <FilterX />
                             <p className="text-lg font-medium">Filter</p>
                         </div>
                         <div className="w-36 h-14 border border-gray-600 shadow-sm flex flex-col p-2 justify-center cursor-pointer">
@@ -65,16 +68,16 @@ const Courses = () => {
 
                 <div className="flex-1 flex flex-col gap-2">
                     { 
-                        results?.map((item) => {
+                        results?.map((item, i) => {
 
                             let rating: React.ReactNode[] = []
 
                             for(let i = 0; i < item.averageRating; i++) {
                                
                                 if(i % item.averageRating !== 0 && i == Math.floor(item.averageRating)) {
-                                    rating.push(<StarHalf className="w-4 h-4 text-yellow-400"/>)
+                                    rating.push(<StarHalf className="w-4 h-4 text-yellow-400" key={i}/>)
                                 } else {
-                                    rating.push(<Star className="w-4 h-4 text-yellow-400"/>)
+                                    rating.push(<Star className="w-4 h-4 text-yellow-400" key={i}/>)
                                 }        
                             }
 
@@ -99,8 +102,8 @@ const Courses = () => {
                     }
                 </div>
                 </div>
-
             </div>
+            <Pagination pages={pages}/>
         </div>
     )
 }
