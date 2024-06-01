@@ -54,17 +54,21 @@ export const uploadCourse = async (req: Request, res: Response) => {
 
 export const getCourses = async (req: Request, res: Response) => {
     try {
-        const params = req.query;
-        const page = Number(params.page) || 1
-        const pageSize = Number(params.pageSize) || 20
+        const query = req.query;
+        const page = Number(query.page) || 1
         
 
         const where: Prisma.CourseWhereInput = {
             
         }
 
-        if(params.tags && typeof params.tags === 'string') {
-            let tags: string[] = params?.tags?.split(',')
+
+        if (query.userId && typeof query.userId === 'string') {
+            where.authorId = query.userId;
+        }
+
+        if(query.tags && typeof query.tags === 'string') {
+            let tags: string[] = query?.tags?.split(',')
 
             if (tags.length > 0) {
                 if (!where.AND) {
@@ -78,17 +82,23 @@ export const getCourses = async (req: Request, res: Response) => {
         }
     }
 
-    if (params.q && typeof params.q === 'string') {
+    if (query.q && typeof query.q === 'string') {
         if (!where.AND) {
             where.AND = [];
         }
         (where.AND as Prisma.CourseWhereInput[]).push({
             title: {
-                contains: params.q,
+                contains: query.q,
                 mode: 'insensitive'
             }
         });
     }
+
+    const coursesNum = await db.course.aggregate({
+        _count: true
+    })
+
+    const pageSize = Number(query.pageSize) || coursesNum._count
 
         const courses = await db.course.findMany({
             where: where,
@@ -109,10 +119,6 @@ export const getCourses = async (req: Request, res: Response) => {
             take: pageSize,
             skip: (page - 1) * pageSize
 
-        })
-
-        const coursesNum = await db.course.aggregate({
-            _count: true
         })
 
         const pages = Math.ceil(coursesNum._count / pageSize)

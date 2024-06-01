@@ -73,7 +73,7 @@ export const Course = () => {
                 <div className="w-full flex flex-col mt-8 gap-2 px-4">
                     <div className="w-1/2 aspect-square bg-emerald-300 mx-auto">
                     </div>
-                    <h1 className="text-xl text-gray-800 font-medium mx-auto">{course?.author.username}</h1>
+                    <a href={`/profile/${course?.author.id}`} className="text-xl text-gray-800 font-medium mx-auto">{course?.author.username}</a>
                     <p className="text-sm font-medium text-gray-600 mx-auto">{course?.author.specialization}</p>
                     <p>{course?.author.description}</p>
                 </div>

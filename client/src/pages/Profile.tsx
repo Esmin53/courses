@@ -1,13 +1,46 @@
+import CourseCard from "@/components/CourseCard"
 import Navbar from "@/components/Navbar"
 import { useAuthStore } from "@/store/useAuthStore"
+import { Course, User } from "@/types"
+import axios from "axios"
 import { Plus, Star } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const Profile = () => {
+    const [courses, setCourses] = useState<Course[]>([])
+    const [user, setUser] = useState<User >()
     
     const { currentUser } = useAuthStore()
     const navigate = useNavigate()
+
+    const location = useLocation()
+    const userId = location.pathname.split('/')[2]
+
+    const getUser = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/user/get-user/${userId}`)
+
+            setUser(response.data.user)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getCourses = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/course/get-courses?userId=${userId}`)
+
+            setCourses(response.data.courses)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     
+    useEffect(() => {
+        getCourses()
+        getUser()
+    }, [])
     
     return (
         <div className="flex flex-col min-h-screen justify-center items-center">
@@ -18,72 +51,23 @@ const Profile = () => {
 
                     </div>
                     <div className="flex flex-col flex-1">
-                        <h1 className="text-3xl font-medium">Esmin Tufekcic</h1>
-                        <h2 className="text-xl py-2">Web Developer</h2>
+                        <h1 className="text-3xl font-medium">{user?.username}</h1>
+                        <h2 className="text-xl py-2">{user?.specialization}</h2>
                         <div className="w-full border border-gray-400 shadow-sm mb-4" />
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Non repellat hic odit. Distinctio molestiae assumenda necessitatibus accusantium repellat nisi, eos blanditiis eaque reiciendis iste, ipsa suscipit non consectetur, dolores magni?</p>
+                        <p>{user?.description}</p>
                     </div>
                 </div>
                 <div className="w-full mt-6">
                     <div className="flex justify-between w-full">
                         <div>
                             <h1 className="text-xl font-semibold">My Courses</h1>
-                            <p className="text-lg font-medium">All courses by asimbrkan</p>
-                        </div>
-                        <div className="flex items-center cursor-pointer" onClick={() => navigate('/new-course')}>
-                            <p className="text-blue-500 font-semibold text-lg">New course </p>
-                            <Plus  className="text-blue-500"/>
+                            <p className="text-lg font-medium">All courses by {user?.username}</p>
                         </div>
                     </div>
                     <div className="grid grid-cols-5 gap-4 py-4">
-                        <div>
-                            <div className="w-full h-44 bg-sky-500"></div>
-                            <h2 className="font-semibold leading-5 line-clamp-2">Lorem ipsum dolor sit amet consectetur adipisicing elit kemal malovicic.</h2>
-                            <p className="text-sm text-gray-600 font-medium">Esmin tufekcic, web developer</p>
-                            <div className="flex gap-2 items-center">
-                                <p className="font-bold">4.7</p>
-                                <div className="flex">
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                </div>
-                            </div>
-                            <p className="font-bold text-lg">$25.50</p>
-                        </div>
-                        <div>
-                            <div className="w-full h-44 bg-sky-500"></div>
-                            <h2 className="font-semibold leading-5 line-clamp-2">Lorem ipsum dolor sit amet consectetur adipisicing elit kemal malovicic.</h2>
-                            <p className="text-sm text-gray-600 font-medium">Esmin tufekcic, web developer</p>
-                            <div className="flex gap-2 items-center">
-                                <p className="font-bold">4.7</p>
-                                <div className="flex">
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                </div>
-                            </div>
-                            <p className="font-bold text-lg">$25.50</p>
-                        </div>
-                        <div>
-                            <div className="w-full h-44 bg-sky-500"></div>
-                            <h2 className="font-semibold leading-5 line-clamp-2">Lorem ipsum dolor sit amet consectetur adipisicing elit kemal malovicic.</h2>
-                            <p className="text-sm text-gray-600 font-medium">Esmin tufekcic, web developer</p>
-                            <div className="flex gap-2 items-center">
-                                <p className="font-bold">4.7</p>
-                                <div className="flex">
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                    <Star  className="w-4 h-4 text-yellow-400"/>
-                                </div>
-                            </div>
-                            <p className="font-bold text-lg">$25.50</p>
-                        </div>
+                        {courses.map((course) => (
+                            <CourseCard {...course} key={course.id}/>
+                        ))}
                     </div>
                 </div>
             </div>

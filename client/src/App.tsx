@@ -27,6 +27,9 @@ function App() {
         <Route path="profile" element={<Profile />}/>
       </Routes>
       <Routes>
+        <Route path="profile/:userId" element={<Profile />}/>
+      </Routes>
+      <Routes>
         <Route path="new-course" element={<NewCourse />}/>
       </Routes>
       <Routes>

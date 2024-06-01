@@ -4,6 +4,7 @@ import cors from "cors"
 
 import authRouter from "./routes/auth"
 import courseRouter from "./routes/course"
+import userRouter from "./routes/user"
 
 const app = express()
 
@@ -17,6 +18,7 @@ app.use(express.json())
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/course', courseRouter)
+app.use('/api/v1/user', userRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
