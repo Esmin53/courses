@@ -5,6 +5,7 @@ import cors from "cors"
 import authRouter from "./routes/auth"
 import courseRouter from "./routes/course"
 import userRouter from "./routes/user"
+import enrollmentRouter from "./routes/enrollment"
 
 const app = express()
 
@@ -19,6 +20,7 @@ app.use(express.json())
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/course', courseRouter)
 app.use('/api/v1/user', userRouter)
+app.use('/api/v1/enrollment', enrollmentRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello World!')

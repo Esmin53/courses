@@ -1,8 +1,21 @@
 import Navbar from "@/components/Navbar";
+import { useAuthStore } from "@/store/useAuthStore";
 import axios from "axios";
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"  
+import { Toaster, toast } from "sonner";
 
 
 export const Course = () => {
@@ -19,23 +32,72 @@ export const Course = () => {
                     description: string
                 }
     }>()
+    const [isEnrolled, setIsEnrolled] = useState<boolean >(false)
 
     const location = useLocation()
     const courseId = location.pathname.split('/')[2]
+    const navigate = useNavigate()
+
+    const { currentUser } = useAuthStore()
 
     const getCourse = async () => {
         try {
-            const response = await axios.get(`http://localhost:3124/api/v1/course/get-course/${courseId}`)
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/course/get-course/${courseId}`)
 
-            console.log(response)
             setCourse(response.data.course)
         } catch (error) {
             console.log(error)
         }
     }
 
+    const getEnrollment = async () => {
+        if(!currentUser) {
+            return
+        }
+
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/enrollment/get-enrollment/${courseId}`, {
+                headers: {
+                    Authorization: `Bearer ${currentUser?.token}`
+                }
+            })
+    
+            setIsEnrolled(response.data.isEnrolled)
+
+        } catch (error) {
+            
+        }
+    }
+
+    const enroll = async () => {
+        try {
+            if(!currentUser) {
+                navigate(`/login?src=course/${courseId}`)
+                return
+            }
+            if(currentUser?.user.id === course?.author.id) {
+                toast.error("You are the author of this course!")
+                return
+            }
+
+            const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/enrollment/create-enrollment`, {courseId: course?.id}, {
+                headers: {
+                    Authorization: `Bearer ${currentUser?.token}`
+                }
+            })
+            
+            if(response.status === 200 && response.data.success === true) {
+                navigate(`/enrollment/${course?.id}`)
+            }
+
+        } catch (error) {
+            
+        }
+    }
+
     useEffect(() => {
         getCourse()
+        getEnrollment()
     }, [])
 
 
@@ -66,10 +128,26 @@ export const Course = () => {
                 <div className="flex gap-4">
 
                 </div>
-                <button className="w-full h-12 bg-primary-purple text-white font-medium rounded-md shadow hover:bg-primary-purple/90 duration-200">
-                    Buy now
-                </button>
-
+                {isEnrolled ? (
+                    <a className="w-full h-12 bg-primary-purple text-white font-medium rounded-md shadow hover:bg-primary-purple/90 duration-200
+                    flex items-center justify-center"
+                    href={`/enrollment/${courseId}`}>Take me to course</a>                    
+                ) : <AlertDialog>
+                <AlertDialogTrigger className="w-full h-12 bg-primary-purple text-white font-medium rounded-md shadow hover:bg-primary-purple/90 duration-200"
+                onClick={() => !currentUser && navigate(`/login?src=course/${courseId}`)}>Buy now</AlertDialogTrigger>
+                <AlertDialogContent className="bg-white">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                    Are you absolutely sure you want to parchuse this course?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => enroll()} className="bg-primary-purple text-white">Continue</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>}
                 <div className="w-full flex flex-col mt-8 gap-2 px-4">
                     <div className="w-1/2 aspect-square bg-emerald-300 mx-auto">
                     </div>
@@ -79,7 +157,7 @@ export const Course = () => {
                 </div>
             </div>
         </div>
-
+        <Toaster position="top-center" richColors/>
     </div>
     )
 };

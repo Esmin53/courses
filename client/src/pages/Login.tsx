@@ -2,11 +2,14 @@ import axios, { AxiosError } from "axios"
 import { useEffect, useState } from "react"
 import { Toaster, toast } from "sonner"
 import { useAuthStore } from "../store/useAuthStore"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 const Login = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+
+    const [ searchParams ] = useSearchParams()
+    const redirectUrl = searchParams.get("src")
 
     const { signIn, currentUser  } = useAuthStore()
     const navigate = useNavigate()
@@ -22,7 +25,11 @@ const Login = () => {
                 if(res.status === 200) {
                     signIn(res.data)
                     toast.success("Login success. You will be redirected to homepage.")
-                    navigate("/")
+                    if(redirectUrl) {
+                        navigate(`/${redirectUrl}`)
+                    } else {
+                        navigate("/")
+                    }
                 } 
             })
 

@@ -7,6 +7,8 @@ import Profile from "./pages/Profile";
 import NewCourse from "./pages/NewCourse";
 import Course from "./pages/Course";
 import Courses from "./pages/Courses";
+import MyProfile from "./pages/MyProfile";
+import Enrollment from "./pages/Enrollment";
 
 function App() {
   return (
@@ -24,7 +26,7 @@ function App() {
         <Route path="become-a-tutor" element={<JoinUs />}/>
       </Routes>
       <Routes>
-        <Route path="profile" element={<Profile />}/>
+        <Route path="my-profile" element={<MyProfile />}/>
       </Routes>
       <Routes>
         <Route path="profile/:userId" element={<Profile />}/>
@@ -37,6 +39,9 @@ function App() {
       </Routes>
       <Routes>
         <Route path="courses" element={<Courses />}/>
+      </Routes>
+      <Routes>
+        <Route path="enrollment/:courseId" element={<Enrollment />}/>
       </Routes>
     </BrowserRouter>
   )

@@ -37,7 +37,7 @@ const Navbar = () => {
                                 <DropdownMenuContent className="min-w-48 bg-white">
                                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem className="cursor-pointer w-full flex items-center hover:bg-zinc-100" onClick={() => navigate('/profile')}>
+                                    <DropdownMenuItem className="cursor-pointer w-full flex items-center hover:bg-zinc-100" onClick={() => navigate('/my-profile')}>
                                         <User className="mr-2 h-4 w-4" />
                                         <span>My Profile</span>
                                     </DropdownMenuItem>
