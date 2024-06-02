@@ -10,6 +10,7 @@ import {
   } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "react-router-dom"
 import SearchBar from "./SearchBar"
+import MobileNavigation from "./MobileNavigation"
 
 
 const Navbar = () => {
@@ -20,7 +21,7 @@ const Navbar = () => {
     return (
         <div className="flex w-full items-center justify-center">
             <div className="w-full flex flex-col md:flex-row md:items-center justify-between max-w-8xl py-2 sm:py-4 gap-2 md:gap-7"> 
-                <h1 className="text-xl sm:text-2xl font-semibold text-primary-purple cursor-pointer" onClick={() => navigate('/')}>WebCourses</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold text-primary-purple cursor-pointer" onClick={() => navigate('/')}>DevCourses</h1>
                 <SearchBar />
                 <ul className="md:flex items-center justify-center gap-4 hidden">
                     <li className="cursor-pointer font-medium" onClick={() => navigate('/')}>Home</li>
@@ -62,7 +63,9 @@ const Navbar = () => {
                         )
                     }
                 </ul>
-                <Sidebar className="md:hidden flex absolute top-3 right-2 w-5 h-5"/>
+                <div className="flex md:hidden absolute top-2.5 right-2">
+                    <MobileNavigation />
+                </div>
             </div>
         </div>
     )

@@ -73,20 +73,21 @@ const SearchBar = () => {
                 text-lg" placeholder="Search..."
                 value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && navigate(`/courses?tags=${tags}&q=${q}`)}/>
             </div>
-            <div className={cn("w-full h-96 bg-white border border-gray-300 shadow absolute -bottom-1 translate-y-[100%] z-40 p-2", {
+            <div className={cn("w-full h-fit bg-white border border-gray-300 shadow absolute -bottom-1 translate-y-[100%] z-40 p-2", {
                 "hidden": hideResults
             })}>
                 {results?.map((course) => (
-                    <div className="w-full h-14 cursor-pointer hover:bg-slate-50 duration-100 flex gap-4 px-2 mb-2" key={course.id} onClick={() => navigate(`/course/${course.id}`)}>
-                        <img src={course.thumbnail} className="aspect-video"/>
+                    <div className="w-full sm:h-14 cursor-pointer hover:bg-slate-50 duration-100 flex gap-4 px-2 py-2 sm:border-b-0 border-b border-gray-400" key={course.id} onClick={() => navigate(`/course/${course.id}`)}>
+                        <img src={course.thumbnail} className="aspect-video hidden sm:flex"/>
                         <div className="flex flex-col">
-                            <h1 className="text-lg font-medium line-clamp-1">{course.title}</h1>
+                            <h1 className="text-sm sm:text-lg line-clamp-2 sm:line-clamp-1">{course.title}</h1>
                             <p className="text-sm text-gray-500"><span className="text-gray-800 font-medium">By </span>
                             {course.author.username}</p>
                         </div>
 
                     </div>
                 ))}
+                {!results?.length ? (<p className="text-gray-400 font-medium py-6">There are no courses that match your search</p>) : null}
             </div>
         </div>
     )
