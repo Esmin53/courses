@@ -60,3 +60,38 @@ export const getEnrollment = async (req: Request, res: Response) => {
         return res.status(200).json({ success: false })
     }
 }
+
+export const getEnrollments = async (req: Request, res: Response) => {
+    try {
+        const user = res.locals.user;
+
+        const enrollments = await db.enrollment.findMany({
+            where: {
+                studentId: user.id
+            },
+            select: {
+                id: true,
+                course: {
+                    select: {
+                        id: true,
+                        title: true,
+                        thumbnail: true,
+                        price: true,
+                        author: {
+                            select: {
+                                id: true,
+                                username: true
+                            }
+
+                        }
+                    }
+                },
+            }
+        })
+
+        return res.status(200).json({ success: true, enrollments})
+        
+    } catch (error) {
+        
+    }
+}

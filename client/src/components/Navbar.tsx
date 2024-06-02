@@ -1,4 +1,4 @@
-import { LogOut, Plus, User } from "lucide-react"
+import { LogOut, Navigation2, Plus, Sidebar, User } from "lucide-react"
 import { useAuthStore } from "../store/useAuthStore"
 import {
     DropdownMenu,
@@ -19,10 +19,10 @@ const Navbar = () => {
 
     return (
         <div className="flex w-full items-center justify-center">
-            <div className="w-full flex items-center justify-between max-w-8xl py-2 sm:py-4"> 
+            <div className="w-full flex flex-col md:flex-row md:items-center justify-between max-w-8xl py-2 sm:py-4 gap-2 md:gap-7"> 
                 <h1 className="text-xl sm:text-2xl font-semibold text-primary-purple cursor-pointer" onClick={() => navigate('/')}>WebCourses</h1>
                 <SearchBar />
-                <ul className="sm:flex items-center justify-center gap-4 hidden">
+                <ul className="md:flex items-center justify-center gap-4 hidden">
                     <li className="cursor-pointer font-medium" onClick={() => navigate('/')}>Home</li>
                     <li className="cursor-pointer font-medium">About us</li>
                     <li className="cursor-pointer font-medium">Courses</li>
@@ -62,6 +62,7 @@ const Navbar = () => {
                         )
                     }
                 </ul>
+                <Sidebar className="md:hidden flex absolute top-3 right-2 w-5 h-5"/>
             </div>
         </div>
     )

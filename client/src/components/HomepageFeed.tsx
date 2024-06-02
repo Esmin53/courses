@@ -38,7 +38,7 @@ const HomepageFeed = () => {
         <div className="w-full">
             <h1 className="text-3xl font-bold text-gray-800">A broad selection of categories</h1>
             <p className="text-xl my-4">Choose from 81 computer science areas and programming languages</p>
-            <div className="flex gap-4 items-center font-medium pt-2 pb-4">
+            <div className="flex gap-4 items-center font-medium pt-2 pb-4 flex-wrap">
                 <p className="cursor-pointer">Web Development</p>
                 <p className="cursor-pointer">Mobile Development</p>
                 <p className="cursor-pointer">Data Science</p>

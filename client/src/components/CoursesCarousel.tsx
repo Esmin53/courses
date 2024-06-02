@@ -11,7 +11,7 @@ const CoursesCarousel = ({coursesArray}: {
             <Carousel >
                 <CarouselContent >
                 {coursesArray?.map((item) => {
-                        return <CarouselItem key={item.id} className="basis-1/5">
+                        return <CarouselItem key={item.id} className="xs:basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
                             <CourseCard {...item}/>
                         </CarouselItem>
                     })}          

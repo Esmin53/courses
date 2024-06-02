@@ -24,6 +24,7 @@ const SearchBar = () => {
 
     const [q, setQ] = useState<string >("")
     const [hideResults, setHideResults] = useState(true)
+    const [hideMobile, setHideMobile] = useState(true)
 
     const searchBarRef = useRef<HTMLDivElement>(null)
 
@@ -43,8 +44,10 @@ const SearchBar = () => {
         const handleClickOutside = (event: React.MouseEvent) => {
             if ( !searchBarRef.current?.contains(event.target as Node)) {
                 setHideResults(true)
+                setHideMobile(true)
             }  else {
                 setHideResults(false)
+                setHideMobile(false)
             } 
           };
 
@@ -63,11 +66,11 @@ const SearchBar = () => {
       }, [q])
 
     return (
-        <div className="flex flex-col flex-1 max-w-[37.5rem] relative" ref={searchBarRef}>
-            <div className="w-full  h-10 rounded-full border border-gray-600 bg-slate-50 shadow-sm flex gap-2 
-            items-center px-2">
-                <Search className="w-7 h-7 text-primary-purple"/>
-                <input type="text" className="flex-1 border-none h-10 py-auto bg-transparent outline-none text-lg" placeholder="Search..."
+        <div className={cn("flex flex-col flex-1 max-w-[37.5rem] relative w-full md:w-fit")} ref={searchBarRef}>
+            <div className={cn("w-full h-9 rounded-full border border-gray-600 bg-slate-50 shadow-sm flex gap-2 items-center px-2")}>
+                <Search className="w-6 h-6 md:w-7 md:h-7 text-primary-purple"/>
+                <input type="text" className="flex flex-1 border-none h-full py-auto bg-transparent outline-none 
+                text-lg" placeholder="Search..."
                 value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && navigate(`/courses?tags=${tags}&q=${q}`)}/>
             </div>
             <div className={cn("w-full h-96 bg-white border border-gray-300 shadow absolute -bottom-1 translate-y-[100%] z-40 p-2", {
