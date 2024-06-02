@@ -1,7 +1,9 @@
+import CoursesCarousel from "@/components/CoursesCarousel"
+import Enrollments from "@/components/Enrollments"
 import Wrapper from "@/components/Wrapper"
 import { uploadImage } from "@/lib/utils"
 import { useAuthStore } from "@/store/useAuthStore"
-import { User } from "@/types"
+import { Course, User } from "@/types"
 import axios from "axios"
 import { Camera, Check, Loader, User2Icon, X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
@@ -14,6 +16,7 @@ const MyProfile = () => {
     const [profilePicture, setProfilePicture] = useState<File | null>()
     const [profilePicturePreview, setProfilePicturePreview] = useState<string | null>(null)
     const [isUploading, setIsUploading] = useState(false)
+    const [courses, setCourses] = useState<Course[]>([])
     
     const { currentUser } = useAuthStore()
 
@@ -27,6 +30,16 @@ const MyProfile = () => {
             const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/user/get-user/${currentUser?.user.id}`)
 
             setUser(response.data.user)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getCourses = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/course/get-courses?userId=${currentUser?.user.id}`)
+
+            setCourses(response.data.courses)
         } catch (error) {
             console.log(error)
         }
@@ -66,6 +79,7 @@ const MyProfile = () => {
         } 
 
         getUser()
+        getCourses()
     }, [])
 
     useEffect(() => {
@@ -79,7 +93,7 @@ const MyProfile = () => {
 
     return (
         <Wrapper>
-            <div className="w-full max-w-8xl flex-1 flex">
+            <div className="w-full max-w-8xl flex-1 flex flex-col gap-6">
                 <div className="w-full flex gap-6">
                     <div className="w-52 h-52 bg-slate-100 shadow border border-slate-200 relative">
                         { profilePicture ? <div className="absolute top-0 right-0 z-40 cursor-pointer" onClick={() => setProfilePicture(null)}>
@@ -88,8 +102,8 @@ const MyProfile = () => {
                         <div className="absolute w-full h-full flex items-center justify-center">
                             <User2Icon className="w-32 h-32 text-slate-400"/>
                         </div>
-                        {profilePicturePreview ? <img src={profilePicturePreview} className="absolute w-full h-full z-20"/> : null}
-                        {user?.profile_picture? <img src={user.profile_picture} className="absolute w-full h-full z-10"/> : null}
+                        {profilePicturePreview ? <img src={profilePicturePreview} className="absolute w-full h-full object-cover object-center z-20"/> : null}
+                        {user?.profile_picture? <img src={user.profile_picture} className="absolute w-full h-full object-cover object-center z-10"/> : null}
                         {profilePicture ? <div className="-right-2.5 -bottom-2.5 absolute rounded-full bg-slate-100 w-9 h-9 flex items-center justify-center 
                         shadow-s border border-slate-200 cursor-pointer text-gray-800 z-30" onClick={() => !isUploading && uploadProfilePicture()}>
                             {isUploading ? <Loader className="animate-spin" /> : <Check />}
@@ -108,6 +122,11 @@ const MyProfile = () => {
                         <p>{user?.description}</p>
                     </div>
                 </div>
+                <div className="w-full flex flex-col gap-2">
+                    <h1 className="text-3xl font-medium text-gray-800">My courses</h1>
+                    <CoursesCarousel coursesArray={courses} />
+                </div>
+                <Enrollments />
             </div>
         </Wrapper>
     )
