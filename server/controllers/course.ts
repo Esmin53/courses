@@ -112,7 +112,7 @@ export const getCourses = async (req: Request, res: Response) => {
                     select: {
                         id: true,
                         username: true,
-                        specialization: true
+                        specialization: true,
                     }
                 }
             },
@@ -169,7 +169,8 @@ export const getCourse = async (req: Request, res: Response) => {
                         id: true,
                         username: true,
                         specialization: true,
-                        description: true
+                        description: true,
+                        profile_picture: true
                     }
                 }
             }

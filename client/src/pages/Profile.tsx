@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar"
 import { useAuthStore } from "@/store/useAuthStore"
 import { Course, User } from "@/types"
 import axios from "axios"
-import { Plus, Star } from "lucide-react"
+import { User2Icon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
@@ -47,8 +47,13 @@ const Profile = () => {
             <Navbar />
             <div className="flex-1 w-full max-w-8xl justify-self-center ">
                 <div className="flex w-full gap-6">
-                    <div className="w-52 h-52 bg-red-300">
+                <div className="w-52 h-52 bg-slate-100 shadow border border-slate-200 relative">
 
+                        <div className="absolute w-full h-full flex items-center justify-center">
+                            <User2Icon className="w-32 h-32 text-slate-400"/>
+                        </div>
+                        {user?.profile_picture? <img src={user.profile_picture} className="absolute w-full h-full z-10"/> : null}
+ 
                     </div>
                     <div className="flex flex-col flex-1">
                         <h1 className="text-3xl font-medium">{user?.username}</h1>

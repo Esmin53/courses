@@ -2,6 +2,8 @@ export interface Author {
     id: string;
     username: string;
     specialization: string;
+    profile_picture?: string;
+    description: string
 }
 
 export interface Course {
@@ -19,5 +21,6 @@ export interface User {
     username: string,
     specialization: string,
     description: string,
-    role: 'STUDENT' | 'TUTOR' | 'ADMIN'
+    role: 'STUDENT' | 'TUTOR' | 'ADMIN',
+    profile_picture?: string
 }

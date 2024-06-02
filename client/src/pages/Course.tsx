@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import { useAuthStore } from "@/store/useAuthStore";
 import axios from "axios";
-import { Star } from "lucide-react";
+import { Star, User2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -16,22 +16,11 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"  
 import { Toaster, toast } from "sonner";
+import { Course as CourseType} from "@/types";
 
 
 export const Course = () => {
-    const [course, setCourse] = useState<{
-        id: string,
-                price: number,
-                description: string,
-                title: string,
-                thumbnail: string
-                author: {
-                    id: string,
-                    username: string,
-                    specialization: string,
-                    description: string
-                }
-    }>()
+    const [course, setCourse] = useState<CourseType>()
     const [isEnrolled, setIsEnrolled] = useState<boolean >(false)
 
     const location = useLocation()
@@ -149,7 +138,11 @@ export const Course = () => {
                 </AlertDialogContent>
               </AlertDialog>}
                 <div className="w-full flex flex-col mt-8 gap-2 px-4">
-                    <div className="w-1/2 aspect-square bg-emerald-300 mx-auto">
+                    <div className="w-1/2 aspect-square bg-slate-100 shadow border border-slate-200 mx-auto relative">
+                        <div className="absolute w-full h-full flex items-center justify-center z-10">
+                            <User2Icon className="w-32 h-32 text-slate-400 z-10"/>
+                        </div>
+                        {course?.author.profile_picture && <img src={course.author.profile_picture} className="w-full h-full z-20 absolute"/>}
                     </div>
                     <a href={`/profile/${course?.author.id}`} className="text-xl text-gray-800 font-medium mx-auto">{course?.author.username}</a>
                     <p className="text-sm font-medium text-gray-600 mx-auto">{course?.author.specialization}</p>
