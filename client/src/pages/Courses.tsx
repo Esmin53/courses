@@ -31,7 +31,7 @@ const Courses = () => {
 
     const getCourses = async () => {
         try {
-            const response = await axios.get(`http://localhost:3124/api/v1/course/get-courses?tags=${queryTags}&q=${querySearch}&page=${currentPage}`)
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/course/get-courses?tags=${queryTags}&q=${querySearch}&page=${currentPage}`)
 
             setResults(response.data.courses)
             setPages(response.data.pages)

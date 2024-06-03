@@ -95,7 +95,7 @@ const Register = () => {
                     <button className="w-full rounded-md text-white h-10 xs:h-12 bg-[#FF725C] mt-4 hover:opacity-95 shadow" type="submit">
                         Register
                     </button>
-                    <p className="text-sm ml-auto">Already registered? <a href="#" className="text-[#FF725C]">Sign In</a></p>
+                    <p className="text-sm ml-auto">Already registered? <a href="/login" className="text-[#FF725C]">Sign In</a></p>
                 </form>
                 </div>
             </div>

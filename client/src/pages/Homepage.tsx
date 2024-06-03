@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import Navbar from "../components/Navbar"
 import HomepageFeed from "@/components/HomepageFeed"
 import Tags from "@/components/Tags"
+import Featured from "@/components/Featured"
 
 
 const Homepage = () => {
@@ -32,6 +33,7 @@ const Homepage = () => {
             </div>
             <HomepageFeed />
             <Tags />
+            <Featured />
             </div>
         </div>
     )

@@ -58,6 +58,8 @@ model Enrollment {
   course          Course @relation(fields: [courseId], references: [id])
   studentId       String
   student         User  @relation(fields: [studentId], references: [id])
+
+  createdAt DateTime  @default(now())
 }
 
 model Rating {

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { db } from "../db/db";
 import { CourseValidator } from "../../shared/validators/course";
 import { Course, Prisma } from "@prisma/client";
+import { getMonth } from "date-fns";
 
 export const uploadCourse = async (req: Request, res: Response) => {
     try {
@@ -180,5 +181,107 @@ export const getCourse = async (req: Request, res: Response) => {
         return res.status(200).json({ success: true, course})
     } catch (error) {
         return res.status(500).json({ success: false})
+    }
+}
+
+export const getFeaturedCourses = async (req: Request, res: Response) => {
+    try {
+        const today = new Date();
+        const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30));
+        
+        const mostRecentEnrollments = await db.course.findMany({
+            select: {
+                id: true,
+                title: true,
+                price: true,
+                thumbnail: true,
+                description: true,
+                author: {
+                    select: {
+                        id: true,
+                        username: true,
+                        specialization: true,
+                    }
+                }
+            },
+            orderBy: {
+                enrollments: {
+                    _count: "desc"
+                }
+            },
+            take: 20 ,
+            where: {
+                enrollments: {
+                    every: {
+                        createdAt: {
+                            gte: thirtyDaysAgo
+                        }
+                    }
+                }
+            }
+        })
+
+        const trendingCoursesWithAverageRating = await Promise.all(mostRecentEnrollments.map(async course => {
+            const avgRating = await db.rating.aggregate({
+                _avg: {
+                    rating: true
+                },
+                where: {
+                    courseId: course.id
+                }
+            });
+        
+            const averageRating = avgRating._avg.rating || 0;
+        
+            return {
+                ...course,
+                averageRating: averageRating
+            };
+        }));
+
+        const mostEnrollments = await db.course.findMany({
+            select: {
+                id: true,
+                title: true,
+                price: true,
+                thumbnail: true,
+                description: true,
+                author: {
+                    select: {
+                        id: true,
+                        username: true,
+                        specialization: true,
+                    }
+                }
+            },
+            orderBy: {
+                enrollments: {
+                    _count: "desc"
+                }
+            },
+            take: 20
+        })
+
+        const popularCoursesWithAverageRating = await Promise.all(mostEnrollments.map(async course => {
+            const avgRating = await db.rating.aggregate({
+                _avg: {
+                    rating: true
+                },
+                where: {
+                    courseId: course.id
+                }
+            });
+        
+            const averageRating = avgRating._avg.rating || 0;
+        
+            return {
+                ...course,
+                averageRating: averageRating
+            };
+        }));
+
+        return res.status(200).json({ success: true, mostEnrollments: popularCoursesWithAverageRating, mostRecentEnrollments: trendingCoursesWithAverageRating})      
+    } catch (error) {
+        return res.status(500).json({ success: false })
     }
 }
