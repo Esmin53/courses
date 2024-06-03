@@ -17,7 +17,7 @@ const Pagination = ({pages}: {pages: number}) => {
     return (
         <div className="w-full justify-center items-center flex py-4">
             <div className="w-full max-w-8xl h-14 flex justify-center items-center gap-4">
-                <div className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center cursor-pointer"
+                <div className="xs:w-10 w-8 xs:h-10 h-8 rounded-full border border-gray-600 flex items-center justify-center cursor-pointer"
                 onClick={() => currentPage - 1 !== 0 && navigate(`/courses?tags=${queryTags}&q=${querySearch}&page=${currentPage - 1}`)}>
                     <ChevronLeft className="text-gray-600"/>
                 </div>
@@ -42,7 +42,7 @@ const Pagination = ({pages}: {pages: number}) => {
                 onClick={() => navigate(`/courses?tags=${queryTags}&q=${querySearch}&page=${pages}`)}>
                     <p>{pages}</p>
                 </div> : null}
-                <div className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center cursor-pointer"
+                <div className="xs:w-10 w-8 xs:h-10 h-8 rounded-full border border-gray-600 flex items-center justify-center cursor-pointer"
                 onClick={() => currentPage + 1 <= pages && navigate(`/courses?tags=${queryTags}&q=${querySearch}&page=${currentPage + 1}`)}>
                     <ChevronRight className="text-gray-600"/>
                 </div>

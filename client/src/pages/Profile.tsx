@@ -43,9 +43,9 @@ const Profile = () => {
     }, [])
     
     return (
-        <div className="flex flex-col min-h-screen justify-center items-center">
+        <div className="flex flex-col min-h-screen justify-center items-center p-2">
             <Navbar />
-            <div className="flex-1 w-full max-w-8xl justify-self-center ">
+            <div className="flex-1 w-full max-w-8xl justify-self-center">
                 <div className="flex w-full gap-6">
                 <div className="w-52 h-52 bg-slate-100 shadow border border-slate-200 relative">
 
@@ -69,7 +69,7 @@ const Profile = () => {
                             <p className="text-lg font-medium">All courses by {user?.username}</p>
                         </div>
                     </div>
-                    <div className="grid grid-cols-5 gap-4 py-4">
+                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6 py-4">
                         {courses.map((course) => (
                             <CourseCard {...course} key={course.id}/>
                         ))}

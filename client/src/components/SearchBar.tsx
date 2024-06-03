@@ -24,7 +24,6 @@ const SearchBar = () => {
 
     const [q, setQ] = useState<string >("")
     const [hideResults, setHideResults] = useState(true)
-    const [hideMobile, setHideMobile] = useState(true)
 
     const searchBarRef = useRef<HTMLDivElement>(null)
 
@@ -44,10 +43,8 @@ const SearchBar = () => {
         const handleClickOutside = (event: React.MouseEvent) => {
             if ( !searchBarRef.current?.contains(event.target as Node)) {
                 setHideResults(true)
-                setHideMobile(true)
             }  else {
                 setHideResults(false)
-                setHideMobile(false)
             } 
           };
 

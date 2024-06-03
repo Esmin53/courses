@@ -93,9 +93,9 @@ const MyProfile = () => {
 
     return (
         <Wrapper>
-            <div className="w-full max-w-8xl flex-1 flex flex-col gap-6">
-                <div className="w-full flex gap-6">
-                    <div className="w-52 h-52 bg-slate-100 shadow border border-slate-200 relative">
+            <div className="w-full max-w-8xl flex-1 flex flex-col gap-4 sm:gap-6">
+                <div className="w-full flex flex-col xs:flex-row gap-4 sm:gap-6">
+                    <div className="xs:w-52 xs:h-52 aspect-square bg-slate-100 shadow border border-slate-200 relative">
                         { profilePicture ? <div className="absolute top-0 right-0 z-40 cursor-pointer" onClick={() => setProfilePicture(null)}>
                             <X className="text-red-600"/>
                         </div> : null}

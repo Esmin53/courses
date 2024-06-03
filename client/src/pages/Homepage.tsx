@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import Navbar from "../components/Navbar"
 import HomepageFeed from "@/components/HomepageFeed"
-import { LANGUAGES } from "../../../shared/constants/languages"
-import { PROGRAMMING_AREAS } from "../../../shared/constants/areas"
+import Tags from "@/components/Tags"
 
 
 const Homepage = () => {
@@ -32,18 +31,7 @@ const Homepage = () => {
                 className="w-full sm:h-[30rem] lg:h-[37.5rem] object-cover" />
             </div>
             <HomepageFeed />
-            <div className="w-full mt-10">
-                <h1 className="text-3xl font-bold text-gray-800">A broad selection of categories</h1>
-                <p className="text-xl my-4">Choose from 81 computer science areas and programming languages</p>
-                <div className="w-full flex gap-6 flex-wrap items-center justify-between">
-                    {LANGUAGES.map((item) => {
-                        return <a key={item.value} href={`/courses?tags=${item.value}&q=&page=1`} className="text-primary-purple text-lg font-medium">{item.label}</a>
-                    })}
-                    {PROGRAMMING_AREAS.map((item) => {
-                        return <a key={item.value} href={`/courses?tags=${item.value}&q=&page=1`} className="text-primary-purple text-lg font-medium">{item.label}</a>
-                    })}
-                </div>
-            </div>
+            <Tags />
             </div>
         </div>
     )

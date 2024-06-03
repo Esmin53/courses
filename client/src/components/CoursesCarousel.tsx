@@ -16,8 +16,8 @@ const CoursesCarousel = ({coursesArray}: {
                         </CarouselItem>
                     })}          
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <CarouselPrevious className="hidden sm:flex "/>
+                <CarouselNext className="hidden sm:flex"/>
             </Carousel>
         </div>
     )

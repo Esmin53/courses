@@ -1,4 +1,4 @@
-import { LogOut, Navigation2, Plus, Sidebar, User } from "lucide-react"
+import { LogOut,  Plus, User } from "lucide-react"
 import { useAuthStore } from "../store/useAuthStore"
 import {
     DropdownMenu,

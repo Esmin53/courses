@@ -45,9 +45,9 @@ const Enrollment = () => {
         <Wrapper>
             <div className="w-full flex-1 h-full max-w-8xl py-4 gap-2">
 
-            <h1 className="text-4xl text-gray-800 font-bold">{media?.title}</h1>
+            <h1 className="text-xl xs:text-3xl sm:text-4xl text-gray-800 font-bold">{media?.title}</h1>
             <p className="text-lg text-gray-600">By <a href={`/profile/${media?.author.id}`} className="font-medium">{media?.author.username}</a></p>
-            <div className="aspect-video max-w-6xl bg-zinc-100 shadow-sm my-4 relative">
+            <div className="aspect-video max-w-6xl bg-slate-100 shadow border border-slate-200 my-4 relative">
                 {media?.media && <video className="w-full h-full absolute top-0 left-0 z-30"  controls>
                     <source src={media?.media} />
                 </video>}

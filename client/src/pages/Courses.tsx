@@ -48,17 +48,18 @@ const Courses = () => {
         <div className="w-full h-full min-h-screen flex flex-col items-center px-2">
             <Navbar />
             <div className="w-full max-w-8xl flex-1">
-                <div className="w-full py-8 flex flex-col gap-6">
-                    <h1 className="text-3xl font-bold text-gray-800">Showing results for "{querySearch?.length ? querySearch : queryTags}"</h1>
+                <div className="w-full py-4 my-4 flex flex-col gap-6 border-b border-gray-400">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">Showing results for "{querySearch?.length ? querySearch : queryTags}"</h1>
                     <div className="flex gap-2">
-                        <div className="w-24 h-14 border border-gray-600 shadow-sm flex items-center justify-center cursor-pointer"
+                        <div className="h-10 w-20 sm:w-24 sm:h-14 border border-gray-600 shadow-sm flex items-center justify-center 
+                        cursor-pointer"
                         onClick={() =>{ 
                         navigate('/courses?tags=&q=&page=1')
                         }}>
                             <FilterX />
                             <p className="text-lg font-medium">Filter</p>
                         </div>
-                        <div className="w-36 h-14 border border-gray-600 shadow-sm flex flex-col p-2 justify-center cursor-pointer">
+                        <div className="min-w-24 sm:min-w-36 h-10 sm:h-14 border border-gray-600 shadow-sm flex flex-col p-2 justify-center cursor-pointer">
                             <p className="text-sm font-medium">Sort By</p>
 
                         </div>
@@ -81,12 +82,12 @@ const Courses = () => {
                                 }        
                             }
 
-                            return <div className="w-full h-48 py-4 flex gap-2 border-b border-gray-400 cursor-pointer"
+                            return <div className="w-full min-hh-48 py-4 flex flex-col sm:flex-row gap-2 border-b border-gray-400 cursor-pointer"
                             onClick={() => navigate(`/course/${item.id}`)}>
-                                <img src={item.thumbnail} className="aspect-video max-w-72
+                                <img src={item.thumbnail} className="aspect-video sm:max-w-72
                                 " />
                                 <div className="flex flex-col flex-1 px-2">
-                                    <div className="flex justify-between w-full">
+                                    <div className="flex justify-between w-full gap-4">
                                         <h1 className="text-gray-800 font-medium line-clamp-2">{item.title}</h1>
                                         <p className="text-lg font-semibold text-gray-800">${item.price}</p>
                                     </div>
