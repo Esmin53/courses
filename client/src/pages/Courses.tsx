@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import axios from "axios"
 import { FilterX, Star, StarHalf } from "lucide-react"
 import Pagination from "@/components/Pagination"
+import Wrapper from "@/components/Wrapper"
 
 
 const Courses = () => {
@@ -45,8 +46,8 @@ const Courses = () => {
     }, [searchParams])
 
     return (
-        <div className="w-full h-full min-h-screen flex flex-col items-center px-2">
-            <Navbar />
+        <Wrapper>
+                    <div className="w-full h-full flex-1 flex flex-col items-center px-2">
             <div className="w-full max-w-8xl flex-1">
                 <div className="w-full py-4 my-4 flex flex-col gap-6 border-b border-gray-400">
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">Showing results for "{querySearch?.length ? querySearch : queryTags}"</h1>
@@ -106,6 +107,7 @@ const Courses = () => {
             </div>
             <Pagination pages={pages}/>
         </div>
+        </Wrapper>
     )
 }
 

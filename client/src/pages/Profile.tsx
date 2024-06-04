@@ -1,5 +1,6 @@
 import CourseCard from "@/components/CourseCard"
 import Navbar from "@/components/Navbar"
+import Wrapper from "@/components/Wrapper"
 import { useAuthStore } from "@/store/useAuthStore"
 import { Course, User } from "@/types"
 import axios from "axios"
@@ -43,8 +44,8 @@ const Profile = () => {
     }, [])
     
     return (
-        <div className="flex flex-col min-h-screen justify-center items-center p-2">
-            <Navbar />
+        <Wrapper>
+            <div className="flex flex-col justify-center items-center p-2 flex-1">
             <div className="flex-1 w-full max-w-8xl justify-self-center">
                 <div className="flex w-full gap-6">
                 <div className="w-52 h-52 bg-slate-100 shadow border border-slate-200 relative">
@@ -77,6 +78,7 @@ const Profile = () => {
                 </div>
             </div>
         </div>
+        </Wrapper>
     )
 }
 

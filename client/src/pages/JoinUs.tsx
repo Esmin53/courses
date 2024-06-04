@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar"
+import Wrapper from "@/components/Wrapper"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useAuthStore } from "@/store/useAuthStore"
 import axios from "axios"
@@ -60,8 +60,8 @@ const JoinUs = () => {
     }, [])
 
     return (
-        <div className="w-full min-h-screen px-2 gap-2 flex flex-col">
-            <Navbar />
+        <Wrapper>
+            <div className="w-full min-h-screen flex-1 px-2 gap-2 flex flex-col">
             <div className="w-full flex-1 flex justify-center items-center">
                 <div className="w-full h-full max-w-8xl flex justify-center items-center ">
                     <img src="https://img.freepik.com/free-vector/color-theory-online-studying-web-design-basics-drawing-tutorial-interior-designer-female-artist-cartoon-character-holding-pencil_335657-3450.jpg?t=st=1716412666~exp=1716416266~hmac=e42ca0eaff3a6860fe1b9d97ef071827ccbe088de7b32166d751aefefbe8f308&w=740"
@@ -97,6 +97,7 @@ const JoinUs = () => {
             </div>
             <Toaster position="top-center" richColors/>
         </div>
+        </Wrapper>
     )
 }
 

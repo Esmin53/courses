@@ -32,7 +32,7 @@ const CourseCard = ({title, author, price, id, averageRating, thumbnail}: Course
 
     return (
         <div onClick={() => navigate(`/course/${id}`)} className="cursor-pointer">
-        <div className=" h-44 bg-sky-500 relative">
+        <div className=" h-44 bg-slate-100 border border-slate-200 relative">
             <img src={thumbnail} alt="Course thumbnail" className="w-full h-full absolute top-0 left-0"/>
         </div>
         <h2 className="font-semibold leading-5 line-clamp-2">{title}</h2>

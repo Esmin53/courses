@@ -22,6 +22,7 @@ import axios from "axios";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
+import Wrapper from "@/components/Wrapper";
 
 export const NewCourse = () => {
 
@@ -173,8 +174,8 @@ export const NewCourse = () => {
 
 
     return (
-        <div className="flex flex-col min-h-screen justify-center items-center relative px-2">
-            <Navbar />
+        <Wrapper>
+            <div className="flex flex-col flex-1 min-h-screen justify-center items-center relative px-2">
             {isUploading ? <div className="w-full h-full absolute top-0 left-0 bg-gray-900/40 flex items-center justify-center z-50">
                 <div className="flex flex-col items-center justify-center text-white">
                     <LucideLoader2 className="animate-spin w-10 h-10" />
@@ -292,6 +293,7 @@ export const NewCourse = () => {
             </div>
             <Toaster />
         </div>
+        </Wrapper>
     )
 }
 

@@ -43,7 +43,7 @@ const Enrollment = () => {
 
     return (
         <Wrapper>
-            <div className="w-full flex-1 h-full max-w-8xl py-4 gap-2">
+            <div className="w-full flex-1 min-h-screen h-full max-w-8xl py-4 gap-2">
 
             <h1 className="text-xl xs:text-3xl sm:text-4xl text-gray-800 font-bold">{media?.title}</h1>
             <p className="text-lg text-gray-600">By <a href={`/profile/${media?.author.id}`} className="font-medium">{media?.author.username}</a></p>

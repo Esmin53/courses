@@ -20,7 +20,7 @@ const Navbar = () => {
 
     return (
         <div className="flex w-full items-center justify-center">
-            <div className="w-full flex flex-col md:flex-row md:items-center justify-between max-w-8xl py-2 sm:py-4 gap-2 md:gap-7"> 
+            <div className="w-full flex flex-col md:flex-row md:items-center justify-between max-w-8xl py-2 sm:py-4 gap-2 md:gap-7 px-2"> 
                 <h1 className="text-xl sm:text-2xl font-semibold text-primary-purple cursor-pointer" onClick={() => navigate('/')}>DevCourses</h1>
                 <SearchBar />
                 <ul className="md:flex items-center justify-center gap-4 hidden">
