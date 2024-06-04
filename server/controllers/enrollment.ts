@@ -54,7 +54,17 @@ export const getEnrollment = async (req: Request, res: Response) => {
             return res.status(200).json({success: false, enrollment: null, isEnrolled: false})
         }
 
-        return res.status(200).json({ success: true, enrollment: enrollment.course, isEnrolled: true})
+        const rating = await db.rating.findFirst({
+            where: {
+                courseId,
+                userId: user.id
+            },
+            select: {
+                rating: true
+            }
+        })
+
+        return res.status(200).json({ success: true, enrollment: enrollment.course, isEnrolled: true, previousRating: rating?.rating || 0})
     } catch (error) {
         console.log(error)
         return res.status(200).json({ success: false })

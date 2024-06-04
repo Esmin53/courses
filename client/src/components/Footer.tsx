@@ -4,7 +4,7 @@ const Footer = () => {
 
     return (
         <div className="w-full min-h-20 bg-zinc-900 flex justify-center items-center py-2 px-2 xl:px-0 ">
-            <div className="max-w-8xl w-full h-full flex justify-around items-center flex-wrap gap-2.5">
+            <div className="max-w-8xl w-full h-full flex justify-around md:justify-between items-center flex-wrap gap-2.5">
                 <a href="/" className="text-2xl sm:text-3xl md:text-4xl text-primary-purple font-bold">DevCourses</a>
                 <div className="flex text-white font-medium gap-2 sm:gap-4 text-sm sm:text-base justify-center items-center ">
                     <a href="/">Home</a>

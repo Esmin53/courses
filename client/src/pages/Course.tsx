@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import { useAuthStore } from "@/store/useAuthStore";
 import axios from "axios";
 import { Star, StarHalf, User2Icon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
     AlertDialog,
@@ -23,8 +23,7 @@ import Wrapper from "@/components/Wrapper";
 export const Course = () => {
     const [course, setCourse] = useState<CourseType>()
     const [isEnrolled, setIsEnrolled] = useState<boolean >(false)
-
-    let rating: React.ReactNode[] = []
+    const [rating, setRating] = useState<ReactNode[] >([])
 
     const location = useLocation()
     const courseId = location.pathname.split('/')[2]
@@ -38,21 +37,12 @@ export const Course = () => {
 
             setCourse(response.data.course)
 
-            if(course?.averageRating) {
-                for(let i = 0; i < course?.averageRating; i++) {
-                               
-                    if(i % course?.averageRating !== 0 && i == Math.floor(course?.averageRating)) {
-                        rating.push(<StarHalf className="w-4 h-4 text-yellow-400" key={i}/>)
-                    } else {
-                        rating.push(<Star className="w-4 h-4 text-yellow-400" key={i}/>)
-                    }        
-                }
-            }
-
         } catch (error) {
             console.log(error)
         }
     }
+
+
 
     const getEnrollment = async () => {
         if(!currentUser) {
@@ -104,6 +94,23 @@ export const Course = () => {
         getEnrollment()
     }, [])
 
+    useEffect(() => {
+        if (course?.averageRating) {
+            const stars = [];
+            const fullStars = Math.floor(course.averageRating);
+            const hasHalfStar = course.averageRating % 1 !== 0;
+
+            for (let i = 0; i < fullStars; i++) {
+                stars.push(<Star className="xs:w-8 w-6 xs:h-8 h-6 text-yellow-400" key={i} />);
+            }
+
+            if (hasHalfStar) {
+                stars.push(<StarHalf className="xs:w-8 w-6 xs:h-8 h-6 text-yellow-400" key={fullStars} />);
+            }
+
+            setRating(stars);
+        }
+    }, [course]);
 
     return (
         <Wrapper>
@@ -117,20 +124,20 @@ export const Course = () => {
         <div className="flex justify-between items-center">
             <div className="flex gap-1">
                 {rating.length ?  
-                    rating.map((item) => item) : 
+                    rating : 
                     <p className=" text-gray-400 sm:text-lg font-medium">No ratings for this course so far</p>}
             </div>
         </div>
     </div>
     <div className="h-full w-full md:w-1/3 flex flex-col gap-4 md:gap-6">
-        <h1 className="text-2xl font-medium text-gray-800 text-center">{course?.title}</h1>
+        <h1 className="text-2xl xs:text-3xl font-medium text-gray-800 text-center xs:text-start">{course?.title}</h1>
         <p>{course?.description}</p>
-        <p className="text-4xl font-bold text-gray-800">$ {course?.price}</p>
+        <p className="text-3xl xs:text-4xl font-bold text-gray-800">$ {course?.price}</p>
         <div className="flex gap-4">
 
         </div>
         {isEnrolled ? (
-            <a className="w-full h-12 bg-primary-purple text-white font-medium rounded-md shadow hover:bg-primary-purple/90 duration-200
+            <a className="w-full h-10 xs:h-12 bg-primary-purple text-white font-medium rounded-md shadow hover:bg-primary-purple/90 duration-200
             flex items-center justify-center"
             href={`/enrollment/${courseId}`}>Take me to course</a>                    
         ) : <AlertDialog>

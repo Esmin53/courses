@@ -175,10 +175,18 @@ export const getCourse = async (req: Request, res: Response) => {
                     }
                 }
             }
-
         })
 
-        return res.status(200).json({ success: true, course})
+        const averageRating = await db.rating.aggregate({
+            _avg: {
+                rating: true
+            },
+            where: {
+                courseId: course?.id
+            }
+        })
+
+        return res.status(200).json({ success: true, course: {...course, averageRating: averageRating._avg.rating}})
     } catch (error) {
         return res.status(500).json({ success: false})
     }
@@ -281,6 +289,57 @@ export const getFeaturedCourses = async (req: Request, res: Response) => {
         }));
 
         return res.status(200).json({ success: true, mostEnrollments: popularCoursesWithAverageRating, mostRecentEnrollments: trendingCoursesWithAverageRating})      
+    } catch (error) {
+        return res.status(500).json({ success: false })
+    }
+}
+
+export const rateCourse = async (req: Request, res: Response) => {
+    try {
+        const user = res.locals.user;
+        
+        const { rating } = req.body
+        const { courseId } = req.params
+
+        const enrollment = await db.enrollment.findFirst({
+            where: {
+                studentId: user.id,
+                courseId
+            }
+        })
+
+        if(!enrollment) {
+            return res.status(401).json({ success: false, message: "User is not enrolled in this course!"})
+        }
+
+        const previousRating = await db.rating.findFirst({
+            where: {
+                courseId: courseId,
+                userId: user.id
+            }
+        })
+
+        if(previousRating) {
+            await db.rating.update({
+                where: {
+                    id: previousRating.id
+                },
+                data: {
+                    rating
+                }
+            })
+        } else {
+            await db.rating.create({
+                data: {
+                    userId: user.id,
+                    courseId,
+                    rating
+                }
+            })
+        }
+
+        return res.status(200).json({ success: true})
+
     } catch (error) {
         return res.status(500).json({ success: false })
     }
