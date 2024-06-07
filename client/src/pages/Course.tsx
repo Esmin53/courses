@@ -18,6 +18,7 @@ import {
 import { Toaster, toast } from "sonner";
 import { Course as CourseType} from "@/types";
 import Wrapper from "@/components/Wrapper";
+import MoreFromAuthor from "@/components/MoreFromAuthor";
 
 
 export const Course = () => {
@@ -170,7 +171,16 @@ export const Course = () => {
     </div>
 </div>
 <Toaster position="top-center" richColors/>
-</div>
+        </div>
+        <div className="w-full flex justify-center px-2 xl:px-0">
+            <div className="max-w-8xlw-full py-4 flex flex-col gap-4 pb-6 border-t border-gray-300 my-12">
+                <h2 className="text-2xl font-medium text-gray-700">More from this author</h2>
+                {course?.author ? 
+                <MoreFromAuthor authorId={course?.author.id} className=" xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 lg:gap-4" pageSize={4} /> : 
+                    null}
+            </div>
+
+        </div>
         </Wrapper>
     )
 };

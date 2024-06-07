@@ -1,3 +1,4 @@
+import MoreFromAuthor from "@/components/MoreFromAuthor"
 import Wrapper from "@/components/Wrapper"
 import { useAuthStore } from "@/store/useAuthStore"
 import axios from "axios"
@@ -77,8 +78,8 @@ const Enrollment = () => {
 
     return (
         <Wrapper>
-            <div className="w-full flex-1 min-h-screen h-full max-w-8xl px-2 xl:px-0 py-4 gap-2">
-
+            <div className="w-full flex-1 min-h-screen h-full max-w-8xl px-2 xl:px-0 py-4 gap-6 flex flex-col lg:flex-row">
+            <div className="flex flex-col flex-1 max-w-8xl gap-2">
             <h1 className="text-xl xs:text-3xl sm:text-4xl text-gray-800 font-bold">{media?.title}</h1>
             <p className="text-lg text-gray-600">By <a href={`/profile/${media?.author.id}`} className="font-medium">{media?.author.username}</a></p>
             <div className="aspect-video max-w-6xl bg-slate-100 shadow border border-slate-200 my-4 relative">
@@ -93,6 +94,13 @@ const Enrollment = () => {
                 <Star className={`sm:w-7 sm:h-7 cursor-pointer ${rating >= 4 && "text-yellow-400"}`} onClick={() => rateCourse(4)}/>
                 <Star className={`sm:w-7 sm:h-7 cursor-pointer ${rating >= 5 && "text-yellow-400"}`} onClick={() => rateCourse(5)}/>
             </div>
+            </div>
+            <div className="flex-1 lg:max-w-64 py-4 flex flex-col gap-6">
+                <h2 className="text-2xl font-medium text-gray-700">More from this author</h2>
+                {media?.author.id ? <MoreFromAuthor authorId={media?.author.id} 
+                className=" xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-1"/> : null}
+            </div>
+
             </div>
             <Toaster />
         </Wrapper>
