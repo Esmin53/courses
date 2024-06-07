@@ -69,7 +69,7 @@ const Register = () => {
             <div className="w-full md:w-1/2 h-screen flex flex-col justify-center items-center flex-1 max-h-[40rem]">
                 <div className="w-full max-w-[30rem] lg:w-3/4 py-12 flex flex-col flex-1 justify-around">
                 <div className="flex flex-col w-full gap-4">
-        	        <h1 className="text-3xl xs:text-4xl font-bold text-center xs:text-start">Wellcome to <span className=" text-[#FF725C]">DevCourses</span></h1>
+        	        <h1 className="text-3xl xs:text-4xl font-bold text-center xs:text-start">Wellcome to <span className=" text-primary-purple">DevCourses</span></h1>
                     <p className="text-gray-500 font-medium text-sm text-center xs:text-start">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit similique <br /> tempora deleniti recusandae accusamus.</p>
                 </div>
                 <form className="w-full rounded-md flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
@@ -92,10 +92,10 @@ const Register = () => {
                         {confirmPasswordError ? <p className="text-xs text-red-400">Confirm password filed must match password</p> : null}
                     </div>
                     
-                    <button className="w-full rounded-md text-white h-10 xs:h-12 bg-[#FF725C] mt-4 hover:opacity-95 shadow" type="submit">
+                    <button className="w-full rounded-md text-white h-10 xs:h-12 bg-primary-purple mt-4 hover:opacity-95 shadow" type="submit">
                         Register
                     </button>
-                    <p className="text-sm ml-auto">Already registered? <a href="/login" className="text-[#FF725C]">Sign In</a></p>
+                    <p className="text-sm ml-auto">Already registered? <a href="/login" className="text-primary-purple">Sign In</a></p>
                 </form>
                 </div>
             </div>
