@@ -173,7 +173,7 @@ export const Course = () => {
 <Toaster position="top-center" richColors/>
         </div>
         <div className="w-full flex justify-center px-2 xl:px-0">
-            <div className="max-w-8xlw-full py-4 flex flex-col gap-4 pb-6 border-t border-gray-300 my-12">
+            <div className="max-w-8xl w-full py-4 flex flex-col gap-4 pb-6 border-t border-gray-300 my-12">
                 <h2 className="text-2xl font-medium text-gray-700">More from this author</h2>
                 {course?.author ? 
                 <MoreFromAuthor authorId={course?.author.id} className=" xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 lg:gap-4" pageSize={4} /> : 

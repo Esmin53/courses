@@ -6,6 +6,7 @@ const CoursesCarousel = ({coursesArray}: {
     coursesArray: Course[]
 }) => {
 
+
     return (
         <div className="w-full">
             <Carousel >

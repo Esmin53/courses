@@ -6,10 +6,12 @@ import axios, { AxiosError } from "axios"
 import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
 import { useAuthStore } from "../store/useAuthStore";
+import { Loader2 } from "lucide-react";
 
 const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [confirmPasswordError, setConfirmPasswordError] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const navigate = useNavigate()
     const { currentUser } = useAuthStore()
@@ -29,14 +31,17 @@ const Register = () => {
             if(watch("password") !== confirmPassword) {
                 return
             }
+            setIsLoading(true)
 
             const response = await axios.post(`http://localhost:3124/api/v1/auth/register`, {username, password})
 
+            setIsLoading(false)
             if(response.status === 200) {
                 toast.success("You have registered successfully. You will be redirected to login.")
                 navigate("/login")
             }
         } catch (error: AxiosError | any) {
+            setIsLoading(false)
             if(error.response.status === 409) {
                 setError("username", {
                  type: "manual",
@@ -93,7 +98,7 @@ const Register = () => {
                     </div>
                     
                     <button className="w-full rounded-md text-white h-10 xs:h-12 bg-primary-purple mt-4 hover:opacity-95 shadow" type="submit">
-                        Register
+                    { isLoading ? <Loader2 className="animate-spin mx-auto" /> : "Register"}
                     </button>
                     <p className="text-sm ml-auto">Already registered? <a href="/login" className="text-primary-purple">Sign In</a></p>
                 </form>

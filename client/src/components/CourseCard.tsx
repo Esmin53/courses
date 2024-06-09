@@ -38,7 +38,7 @@ const CourseCard = ({title, author, price, id, averageRating, thumbnail}: Course
         <h2 className="font-semibold leading-5 line-clamp-2">{title}</h2>
         <p className="text-sm text-gray-600 font-medium">{author.username}, {author.specialization}</p>
         <div className="flex gap-2 items-center">
-            <p className="font-bold">{averageRating !== 0 ? averageRating : <span className="text-sm font-md text-gray-500">No ratings so far</span>}</p>
+            <p className="font-bold">{averageRating !== 0 ? averageRating.toPrecision(2) : <span className="text-sm font-md text-gray-500">No ratings so far</span>}</p>
             <div className="flex">
                 {rating.map((item) => item)}
             </div>

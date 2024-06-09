@@ -2,20 +2,23 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import CoursesCarousel from "./CoursesCarousel";
 import { Course } from "@/types";
+import SkeletonCarousel from "./SkeltonCarousel";
 
 
 const HomepageFeed = () => {
     const [courses, setCourses] = useState<Course[]>([])
+    const [isLoading, setIsLoading] = useState(true)
 
     const getCourses = async () => {
         try {
             
             const response = await axios.get(`http://localhost:3124/api/v1/course/get-courses?tags=web-development,mobile-development,data-science,game-development,machine-learning`)
 
-            console.log(response.data)
             setCourses(response.data.courses)
+            setIsLoading(false)
         } catch (error) {
             console.log(error)
+            setIsLoading(false)
         }
     }
 
@@ -38,7 +41,7 @@ const HomepageFeed = () => {
                 <h1 className="font-bold text-xl sm:text-2xl text-gray-800">From Hobby To Paycheck</h1>
                 <p className="text-sm sm:text-md sm:w-3/4 py-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet deserunt soluta, deleniti nisi quos temporibus Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi impedit id ipsum minus veritatis eum consequuntur iusto amet nobis accusamus. sit! Similique aspernatur incidunt porro velit vel eum expedita hic! Voluptas ab aperiam deleniti!</p>
                 <div className=" pt-6 w-full">
-                    <CoursesCarousel coursesArray={courses} />
+                    {isLoading ? <SkeletonCarousel /> : <CoursesCarousel coursesArray={courses} />}
                 </div>
             </div>
         </div>

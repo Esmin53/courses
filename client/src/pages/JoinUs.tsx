@@ -2,6 +2,7 @@ import Wrapper from "@/components/Wrapper"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useAuthStore } from "@/store/useAuthStore"
 import axios from "axios"
+import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Toaster, toast } from "sonner"
@@ -12,6 +13,7 @@ const JoinUs = () => {
     const [description, setDescription] = useState("")
     const [specialization, setSpecialization] = useState("")
     const [terms, setTerms] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { currentUser, updateUser } = useAuthStore()
     const navigate = useNavigate()
@@ -28,6 +30,8 @@ const JoinUs = () => {
             return
         }
 
+        setIsLoading(true)
+
         try {
             
             await axios.post(`http://localhost:3124/api/v1/auth/become-a-tutor`, {description, specialization}, {
@@ -35,18 +39,19 @@ const JoinUs = () => {
                     Authorization: `Bearer ${currentUser?.token}`
                 }
             }).then((res) => {
+                setIsLoading(false)
                 if(res.status === 200) {
                     updateUser(res.data.userInfo)
                     toast.success("You have successfully become a tutor. Congratulations!")
-                    navigate('/profile')
+                    navigate('/my-profile')
                 }
             })
-
 
             
 
         } catch (error) {
             toast.error('Something went wrong. Please try again later.')
+            setIsLoading(false)
         }
     }
 
@@ -90,7 +95,9 @@ const JoinUs = () => {
                                 </div>
                             </div>
                             <button type="submit"
-                            className="w-full h-10 bg-primary-purple rounded-md text-white font-medium shadow hover:opacity-90 duration-150">Become a tutor</button>
+                            className="w-full h-10 bg-primary-purple rounded-md text-white font-medium shadow hover:opacity-90 duration-150">
+                                    { isLoading ? <Loader2 className="animate-spin mx-auto" /> : "Become a tutor"}
+                            </button>
                         </form>
                     </div>
                 </div>

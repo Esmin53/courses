@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar"
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import axios from "axios"
@@ -23,6 +22,7 @@ const Courses = () => {
         },
         averageRating: number
     }[]>()
+    const [isFetching, setIsFetching] = useState(true)
 
     const queryTags = searchParams.get('tags')
     const querySearch = searchParams.get('q')
@@ -36,8 +36,9 @@ const Courses = () => {
 
             setResults(response.data.courses)
             setPages(response.data.pages)
+            setIsFetching(false)
         } catch (error) {
-            
+            setIsFetching(false)
         }
     }
 
@@ -68,7 +69,14 @@ const Courses = () => {
                 </div>
                 <div className="flex gap-6 w-full h-full">
 
-                <div className="flex-1 flex flex-col gap-2">
+                {isFetching ? <div className="w-full flex flex-col gap-3 sm:gap-6">
+                        <div className="w-full h-48 bg-slate-100 shadow animate-pulse" />
+                        <div className="w-full h-48 bg-slate-100 shadow animate-pulse" />
+                        <div className="w-full h-48 bg-slate-100 shadow animate-pulse" />
+                        <div className="w-full h-48 bg-slate-100 shadow animate-pulse" />
+                        <div className="w-full h-48 bg-slate-100 shadow animate-pulse" />
+                        <div className="w-full h-48 bg-slate-100 shadow animate-pulse" />
+                </div> : <div className="flex-1 flex flex-col gap-2">
                     { 
                         results?.map((item, i) => {
 
@@ -83,7 +91,7 @@ const Courses = () => {
                                 }        
                             }
 
-                            return <div className="w-full min-hh-48 py-4 flex flex-col sm:flex-row gap-2 border-b border-gray-400 cursor-pointer"
+                            return <div className="w-full min-h-48 py-4 flex flex-col sm:flex-row gap-2 border-b border-gray-400 cursor-pointer"
                             onClick={() => navigate(`/course/${item.id}`)}>
                                 <img src={item.thumbnail} className="aspect-video sm:max-w-72
                                 " />
@@ -102,7 +110,7 @@ const Courses = () => {
                             </div>
                         })
                     }
-                </div>
+                </div>}
                 </div>
             </div>
             <Pagination pages={pages}/>

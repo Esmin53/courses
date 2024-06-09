@@ -3,10 +3,12 @@ import { useEffect, useState } from "react"
 import { Toaster, toast } from "sonner"
 import { useAuthStore } from "../store/useAuthStore"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import { Loader2 } from "lucide-react"
 
 const Login = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [isLoading, setIsLoading] = useState<boolean >(false)
 
     const [ searchParams ] = useSearchParams()
     const redirectUrl = searchParams.get("src")
@@ -15,14 +17,17 @@ const Login = () => {
     const navigate = useNavigate()
 
     const handleSubmit = async () => {
+        if(isLoading) return
+        setIsLoading(true)
         try {
             if(!username.length || !password.length) {
                 toast.error("Please provide valid username and password!")
                 return
             }
 
-            await axios.post(`http://localhost:3124/api/v1/auth/login`, {username, password}).then((res) => {
-                if(res.status === 200) {
+            await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/login`, {username, password}).then((res) => {
+            setIsLoading(false)    
+            if(res.status === 200) {
                     signIn(res.data)
                     toast.success("Login success. You will be redirected to homepage.")
                     if(redirectUrl) {
@@ -35,6 +40,7 @@ const Login = () => {
 
 
         } catch (error: AxiosError | any) {
+            setIsLoading(false)
             if(error.response.status === 404 || error.response.status === 400) {
                 toast.error("Incorrect username or password! Please try again.")
             } else {
@@ -76,7 +82,7 @@ const Login = () => {
                 
                 <div className="w-full xs:w-5/6 flex flex-col gap-1">
                     <button className="w-full rounded-md text-white h-12 bg-primary-purple hover:opacity-95" type="submit">
-                        Login
+                        { isLoading ? <Loader2 className="animate-spin mx-auto" /> : "Login"}
                     </button>
                     <p className="text-sm text-end">Not an user? <a href="/register" className="text-primary-purple">Sign Up.</a></p>
                 </div>
